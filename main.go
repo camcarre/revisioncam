@@ -10,16 +10,13 @@ import (
 
 func main() {
 	// Chercher Python 3.11 en priorité
-	pythonCmd := "/tmp/python311/bin/python3.11"
+	pythonCmd := "python3.11"
 	if _, err := exec.LookPath(pythonCmd); err != nil {
-		pythonCmd = "python3.11"
+		pythonCmd = "python3"
 		if _, err := exec.LookPath(pythonCmd); err != nil {
-			pythonCmd = "python3"
+			pythonCmd = "python"
 			if _, err := exec.LookPath(pythonCmd); err != nil {
-				pythonCmd = "python"
-				if _, err := exec.LookPath(pythonCmd); err != nil {
-					log.Fatal("Python not found")
-				}
+				log.Fatal("Python not found")
 			}
 		}
 	}
