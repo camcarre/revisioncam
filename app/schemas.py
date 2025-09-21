@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, Field, validator
 
 
 class ExamBase(BaseModel):
@@ -16,7 +16,8 @@ class ExamCreate(ExamBase):
 class ExamRead(ExamBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class CourseBase(BaseModel):
@@ -36,7 +37,8 @@ class CourseCreate(CourseBase):
 class CourseRead(CourseBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class ScoreBase(BaseModel):
@@ -46,11 +48,11 @@ class ScoreBase(BaseModel):
     total: int = Field(gt=0, description="Score total, doit être positif")
     date_eval: date
     
-    @model_validator(mode='after')
-    def validate_score_not_exceed_total(self):
-        if self.score > self.total:
+    @validator('score')
+    def validate_score_not_exceed_total(cls, v, values):
+        if 'total' in values and v > values['total']:
             raise ValueError('Le score ne peut pas dépasser le total')
-        return self
+        return v
 
 
 class ScoreCreate(ScoreBase):
@@ -60,7 +62,8 @@ class ScoreCreate(ScoreBase):
 class ScoreRead(ScoreBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class PlanningItemBase(BaseModel):
@@ -81,7 +84,8 @@ class PlanningItemUpdate(BaseModel):
 class PlanningItemRead(PlanningItemBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class DisponibiliteBase(BaseModel):
@@ -96,7 +100,8 @@ class DisponibiliteCreate(DisponibiliteBase):
 class DisponibiliteRead(DisponibiliteBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class WeeklyAvailabilityBase(BaseModel):
@@ -111,7 +116,8 @@ class WeeklyAvailabilityCreate(WeeklyAvailabilityBase):
 class WeeklyAvailabilityRead(WeeklyAvailabilityBase):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class WeeklyAvailabilityUpdate(BaseModel):
@@ -129,7 +135,8 @@ class BaremeUpdate(BaremeBase):
 class BaremeRead(BaremeBase):
     indice: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class ParametreBase(BaseModel):
@@ -144,7 +151,8 @@ class ParametreUpdate(ParametreBase):
 class ParametreRead(ParametreBase):
     cle: str
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class CourseWithPlanning(BaseModel):

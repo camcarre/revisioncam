@@ -83,8 +83,16 @@ La base SQLite `revision.db` est créée automatiquement à la racine du projet.
 
 ### 🌐 Accès à l'application
 Une fois déployé, votre application sera accessible via l'URL Render fournie :
-- Interface principale : `https://votre-app.onrender.com/`
-- CardCamille : `https://votre-app.onrender.com/static/cardcamille/index.html`
+- **Page de connexion** : `https://votre-app.onrender.com/`
+  - **Identifiants** : `camcam` / `202122`
+- **Interface principale** : `https://votre-app.onrender.com/static/index.html`
+- **CardCamille** : `https://votre-app.onrender.com/static/cardcamille/index.html`
+
+### 🔐 Système d'authentification
+- **Login simple** : Identifiants codés en dur dans le JavaScript
+- **Session** : Durée de 24 heures avec localStorage
+- **Protection** : Toutes les pages sont protégées par authentification
+- **Déconnexion** : Bouton disponible dans la navigation
 
 ### 📱 Compatibilité
 - Interface responsive compatible mobile/tablette

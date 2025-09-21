@@ -25,9 +25,11 @@ git commit -m "🚀 Déploiement initial de RevisionCam
 - Interface Apple-style moderne
 - Planning de révisions adaptatif
 - Module CardCamille intégré
+- Système d'authentification simple
 - API FastAPI complète
 - Base de données SQLite
 - Interface responsive
+- Protection par mot de passe
 
 🎯 Prêt pour le déploiement sur Render"
 

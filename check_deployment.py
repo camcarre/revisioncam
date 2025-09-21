@@ -49,6 +49,8 @@ def main():
     
     # Frontend
     checks.append(check_directory_exists("frontend", "Dossier frontend"))
+    checks.append(check_file_exists("frontend/login.html", "Page de connexion"))
+    checks.append(check_file_exists("frontend/auth.js", "Système d'authentification"))
     checks.append(check_file_exists("frontend/index.html", "Page d'accueil"))
     checks.append(check_file_exists("frontend/cours.html", "Page cours"))
     checks.append(check_file_exists("frontend/planning.html", "Page planning"))
@@ -76,6 +78,9 @@ def main():
     
     if passed == total:
         print("🎉 Tous les fichiers sont présents ! Prêt pour le déploiement.")
+        print("\n🔐 Identifiants de connexion:")
+        print("   - Utilisateur: camcam")
+        print("   - Mot de passe: 202122")
         print("\n🚀 Pour déployer:")
         print("1. Exécuter: ./deploy.sh")
         print("2. Aller sur https://render.com")
