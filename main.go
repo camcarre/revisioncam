@@ -36,12 +36,19 @@ func main() {
 	debugCmd.Stderr = os.Stderr
 	debugCmd.Run()
 	
-	// Debug: Lister les modules installés
-	fmt.Println("🔍 Debug: Modules installés dans /usr/local/lib/python3.11/dist-packages...")
-	listCmd := exec.Command("ls", "-la", "/usr/local/lib/python3.11/dist-packages/")
+	// Debug: Lister les modules installés dans le bon répertoire
+	fmt.Println("🔍 Debug: Modules installés dans /opt/render/.local/lib/python3.11/site-packages...")
+	listCmd := exec.Command("ls", "-la", "/opt/render/.local/lib/python3.11/site-packages/")
 	listCmd.Stdout = os.Stdout
 	listCmd.Stderr = os.Stderr
 	listCmd.Run()
+	
+	// Debug: Vérifier si le répertoire existe
+	fmt.Println("🔍 Debug: Vérification de l'existence du répertoire...")
+	checkCmd := exec.Command("ls", "-la", "/opt/render/.local/")
+	checkCmd.Stdout = os.Stdout
+	checkCmd.Stderr = os.Stderr
+	checkCmd.Run()
 	
 	// Debug: Vérifier si uvicorn est installé
 	fmt.Println("🔍 Debug: Test d'import uvicorn...")
