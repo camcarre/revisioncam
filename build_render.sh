@@ -4,13 +4,34 @@
 echo "🚀 Build Render - RevisionCam"
 echo "================================"
 
+# Installer Python 3.11 si nécessaire
+echo "🐍 Installation de Python 3.11..."
+if ! command -v python3.11 &> /dev/null; then
+    echo "Installation de Python 3.11..."
+    # Utiliser pyenv ou installer depuis source
+    curl -sSL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar -xz
+    cd Python-3.11.9
+    ./configure --prefix=/tmp/python311
+    make -j$(nproc)
+    make install
+    export PATH="/tmp/python311/bin:$PATH"
+    cd ..
+fi
+
 # Vérifier la version Python
 echo "📋 Version Python:"
-python --version
+python3.11 --version || python --version
+
+# Utiliser Python 3.11 si disponible
+PYTHON_CMD="python"
+if command -v python3.11 &> /dev/null; then
+    PYTHON_CMD="python3.11"
+    export PYTHON_CMD
+fi
 
 # Mettre à jour pip
 echo "📦 Mise à jour de pip..."
-pip install --upgrade pip
+$PYTHON_CMD -m pip install --upgrade pip
 
 # Installer les dépendances minimales
 echo "📦 Installation des dépendances..."

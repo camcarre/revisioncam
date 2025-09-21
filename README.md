@@ -66,15 +66,15 @@ La base SQLite `revision.db` est créée automatiquement à la racine du projet.
    - Connecter votre compte GitHub
    - Sélectionner le repository `revisioncam`
 
-2. **Configuration du service**
-   - **Name** : `revisioncam`
-   - **Environment** : `Python 3`
-   - **Build Command** : `./build_render.sh`
-   - **Start Command** : `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-   - **Python Version** : `3.11.9` (obligatoire - Python 3.13 incompatible)
+            2. **Configuration du service**
+               - **Name** : `revisioncam`
+               - **Environment** : `Python 3`
+               - **Build Command** : `./build_render.sh`
+               - **Start Command** : `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+               - **Python Version** : `3.13.4` (version par défaut de Render)
 
 3. **Variables d'environnement (optionnel)**
-   - `PYTHON_VERSION` : `3.11.9`
+   - `PORT` : `8000`
 
 4. **Déployer**
    - Cliquer "Create Web Service"
