@@ -50,9 +50,16 @@ func main() {
 	checkCmd.Stderr = os.Stderr
 	checkCmd.Run()
 	
+	// Debug: Vérifier le répertoire bin mentionné dans le warning
+	fmt.Println("🔍 Debug: Vérification de /opt/render/.local/bin...")
+	binCmd := exec.Command("ls", "-la", "/opt/render/.local/bin/")
+	binCmd.Stdout = os.Stdout
+	binCmd.Stderr = os.Stderr
+	binCmd.Run()
+	
 	// Debug: Chercher où sont installés les modules
 	fmt.Println("🔍 Debug: Recherche des modules dans tous les répertoires possibles...")
-	searchCmd := exec.Command("find", "/opt", "/usr", "/home", "-name", "uvicorn*", "-type", "d", "2>/dev/null")
+	searchCmd := exec.Command("find", "/opt", "/usr", "/home", "-name", "uvicorn*", "-type", "d")
 	searchCmd.Stdout = os.Stdout
 	searchCmd.Stderr = os.Stderr
 	searchCmd.Run()
@@ -77,8 +84,10 @@ func main() {
 	cmd.Stderr = os.Stderr
 	
 	// Ajouter le chemin des modules installés par pip (basé sur le warning)
+	// Le warning indique que uvicorn est dans /opt/render/.local/bin
 	cmd.Env = append(os.Environ(), 
-		"PYTHONPATH=/opt/render/.local/lib/python3.11/site-packages:/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:"+os.Getenv("PYTHONPATH"))
+		"PYTHONPATH=/opt/render/.local/lib/python3.11/site-packages:/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:"+os.Getenv("PYTHONPATH"),
+		"PATH=/opt/render/.local/bin:"+os.Getenv("PATH"))
 
 	fmt.Println("🚀 Starting RevisionCam with Go wrapper...")
 	fmt.Printf("📋 Using Python: %s\n", pythonCmd)
