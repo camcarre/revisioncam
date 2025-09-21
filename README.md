@@ -18,7 +18,11 @@ Projet FastAPI + SQLite pour générer et ajuster automatiquement un planning de
    uvicorn app.main:app --reload
    ```
 
-3. Ouvrir [http://127.0.0.1:8000/](http://127.0.0.1:8000/) pour accéder aux pages HTML (interface Apple-style) :
+3. Ouvrir [http://127.0.0.1:8000/](http://127.0.0.1:8000/) pour accéder au système de login :
+   - **Login** : `camcam`
+   - **Mot de passe** : `202122`
+   
+   Après connexion, accès aux pages HTML (interface Apple-style) :
    - **Cours** : `/static/cours.html` - Gérer les cours et examens
    - **Planning** : `/static/planning.html` - Vue calendrier des révisions
    - **Scores** : `/static/scores.html` - Enregistrer les résultats QCM
