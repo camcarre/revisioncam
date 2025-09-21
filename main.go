@@ -71,8 +71,22 @@ func main() {
 	envCmd.Stderr = os.Stderr
 	envCmd.Run()
 	
-	// Debug: Vérifier si uvicorn est installé
-	fmt.Println("🔍 Debug: Test d'import uvicorn...")
+	// Installation des dépendances au runtime
+	fmt.Println("🔧 Installation des dépendances au runtime...")
+	installCmd := exec.Command(pythonCmd, "-m", "pip", "install", "--break-system-packages", "--user", "fastapi==0.95.2", "uvicorn==0.22.0", "SQLAlchemy==1.4.53", "pydantic==1.10.12", "python-dateutil==2.8.2")
+	installCmd.Stdout = os.Stdout
+	installCmd.Stderr = os.Stderr
+	installCmd.Run()
+	
+	// Debug: Vérifier où sont installés les modules après installation
+	fmt.Println("🔍 Debug: Vérification du répertoire utilisateur après installation...")
+	userBaseCmd := exec.Command(pythonCmd, "-c", "import site; print('USER_BASE:', site.getuserbase()); print('USER_SITE:', site.getusersitepackages())")
+	userBaseCmd.Stdout = os.Stdout
+	userBaseCmd.Stderr = os.Stderr
+	userBaseCmd.Run()
+	
+	// Debug: Vérifier si uvicorn est maintenant installé
+	fmt.Println("🔍 Debug: Test d'import uvicorn après installation...")
 	importCmd := exec.Command(pythonCmd, "-c", "import uvicorn; print('uvicorn trouvé:', uvicorn.__file__)")
 	importCmd.Stdout = os.Stdout
 	importCmd.Stderr = os.Stderr
