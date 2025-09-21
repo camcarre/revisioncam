@@ -36,6 +36,13 @@ func main() {
 	debugCmd.Stderr = os.Stderr
 	debugCmd.Run()
 	
+	// Debug: Lister les modules installés
+	fmt.Println("🔍 Debug: Modules installés dans /usr/local/lib/python3.11/dist-packages...")
+	listCmd := exec.Command("ls", "-la", "/usr/local/lib/python3.11/dist-packages/")
+	listCmd.Stdout = os.Stdout
+	listCmd.Stderr = os.Stderr
+	listCmd.Run()
+	
 	// Debug: Vérifier si uvicorn est installé
 	fmt.Println("🔍 Debug: Test d'import uvicorn...")
 	importCmd := exec.Command(pythonCmd, "-c", "import uvicorn; print('uvicorn trouvé:', uvicorn.__file__)")
@@ -48,9 +55,9 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	
-	// Ajouter le chemin des modules installés par pip (plusieurs chemins possibles)
+	// Ajouter le chemin des modules installés par pip (basé sur le debug)
 	cmd.Env = append(os.Environ(), 
-		"PYTHONPATH=/opt/render/.local/lib/python3.11/site-packages:/opt/render/.local/lib/python3.11/dist-packages:/home/render/.local/lib/python3.11/site-packages:/home/render/.local/lib/python3.11/dist-packages:"+os.Getenv("PYTHONPATH"))
+		"PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/render/.local/lib/python3.11/site-packages:"+os.Getenv("PYTHONPATH"))
 
 	fmt.Println("🚀 Starting RevisionCam with Go wrapper...")
 	fmt.Printf("📋 Using Python: %s\n", pythonCmd)
