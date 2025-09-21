@@ -67,6 +67,7 @@ La base SQLite `revision.db` est créée automatiquement à la racine du projet.
    - **Environment** : `Python 3`
    - **Build Command** : `pip install -r requirements.txt`
    - **Start Command** : `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - **Python Version** : `3.11.0` (recommandé)
 
 3. **Variables d'environnement (optionnel)**
    - `PYTHON_VERSION` : `3.11.0`
