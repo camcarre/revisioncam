@@ -29,10 +29,14 @@ func main() {
 		log.Fatal("app/main.py not found")
 	}
 
-	// Commande pour lancer l'application
+	// Ajouter le chemin des modules au PYTHONPATH
 	cmd := exec.Command(pythonCmd, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", getPort())
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	
+	// Ajouter le chemin des modules installés par pip
+	cmd.Env = append(os.Environ(), 
+		"PYTHONPATH=/opt/render/.local/lib/python3.11/site-packages:/opt/render/.local/lib/python3.11/dist-packages:"+os.Getenv("PYTHONPATH"))
 
 	fmt.Println("🚀 Starting RevisionCam with Go wrapper...")
 	fmt.Printf("📋 Using Python: %s\n", pythonCmd)
