@@ -36,7 +36,7 @@ if FRONTEND_DIR.exists():
 
 @app.get("/", response_class=FileResponse)
 def index() -> FileResponse:
-    return FileResponse(FRONTEND_DIR / "index.html")
+    return FileResponse(FRONTEND_DIR / "login.html")
 
 
 @app.get("/health")

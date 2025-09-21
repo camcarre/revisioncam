@@ -699,5 +699,18 @@
         document.getElementById('date_eval').value = new Date().toISOString().split('T')[0];
       });
     </script>
+    <script>
+      // Vérification de connexion
+      document.addEventListener('DOMContentLoaded', function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        if (!isLoggedIn) {
+          window.location.href = '/static/login.html';
+          return;
+        }
+        
+        console.log('Page scores chargée - Utilisateur connecté');
+      });
+    </script>
   </body>
 </html>

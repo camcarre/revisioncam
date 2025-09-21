@@ -1100,5 +1100,18 @@
         }, 200); // Augmenter le délai pour être sûr
       });
     </script>
+    <script>
+      // Vérification de connexion
+      document.addEventListener('DOMContentLoaded', function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        if (!isLoggedIn) {
+          window.location.href = '/static/login.html';
+          return;
+        }
+        
+        console.log('Page paramètres chargée - Utilisateur connecté');
+      });
+    </script>
   </body>
 </html>

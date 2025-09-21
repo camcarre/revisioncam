@@ -278,6 +278,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/static/parametres.html">Paramètres</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="logoutBtn" style="display: none;">
+                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -404,5 +409,54 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     ></script>
+    <script>
+      // Vérification de connexion
+      document.addEventListener('DOMContentLoaded', function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const username = localStorage.getItem('username');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (!isLoggedIn) {
+          // Rediriger vers la page de login
+          window.location.href = '/static/login.html';
+          return;
+        }
+        
+        // Afficher le bouton de déconnexion
+        if (logoutBtn) {
+          logoutBtn.style.display = 'block';
+          logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+          });
+        }
+        
+        // Afficher un message de bienvenue
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'alert alert-info';
+        welcomeMsg.innerHTML = `
+          <i class="fas fa-user-circle me-2"></i>
+          Bienvenue, <strong>${username}</strong> ! 
+          <small class="text-muted">(${new Date().toLocaleString('fr-FR')})</small>
+        `;
+        
+        // Insérer le message après la navbar
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+          navbar.insertAdjacentElement('afterend', welcomeMsg);
+        }
+        
+        console.log('Page d\'accueil chargée - Utilisateur connecté:', username);
+      });
+      
+      function logout() {
+        if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('username');
+          localStorage.removeItem('loginTime');
+          window.location.href = '/static/login.html';
+        }
+      }
+    </script>
   </body>
 </html>

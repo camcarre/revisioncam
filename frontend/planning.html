@@ -784,5 +784,18 @@
         renderCalendar();
       });
     </script>
+  <script>
+    // Vérification de connexion
+    document.addEventListener('DOMContentLoaded', function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      
+      if (!isLoggedIn) {
+        window.location.href = '/static/login.html';
+        return;
+      }
+      
+      console.log('Page planning chargée - Utilisateur connecté');
+    });
+    </script>
   </body>
 </html>
