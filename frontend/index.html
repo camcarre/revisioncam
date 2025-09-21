@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendrier de Révisions</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --apple-blue: #007AFF;
+        --apple-gray: #F2F2F7;
+        --apple-dark-gray: #1C1C1E;
+        --apple-light-gray: #F9F9F9;
+        --apple-text: #1D1D1F;
+        --apple-text-secondary: #86868B;
+        --apple-border: #D2D2D7;
+        --apple-success: #34C759;
+        --apple-warning: #FF9500;
+        --apple-error: #FF3B30;
+        --apple-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        --apple-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+
+      * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%);
+        min-height: 100vh;
+        color: var(--apple-text);
+        line-height: 1.6;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--apple-border);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-brand {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: var(--apple-text) !important;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        color: var(--apple-text-secondary) !important;
+        transition: color 0.3s ease;
+      }
+
+      .nav-link:hover, .nav-link.active {
+        color: var(--apple-blue) !important;
+      }
+
+      .hero-section {
+        padding: 80px 0;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        margin: 40px 0;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--apple-blue) 0%, #5856D6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--apple-text-secondary);
+        font-weight: 400;
+        margin-bottom: 2rem;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--apple-shadow-hover);
+      }
+
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--apple-blue) 0%, #5856D6 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 1rem;
+      }
+
+      .feature-text {
+        color: var(--apple-text-secondary);
+        margin-bottom: 1.5rem;
+      }
+
+      .btn-apple {
+        background: var(--apple-blue);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 500;
+        color: white;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-apple:hover {
+        background: #0056CC;
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+        color: white;
+      }
+
+      .btn-apple-outline {
+        background: transparent;
+        border: 2px solid var(--apple-blue);
+        border-radius: 12px;
+        padding: 10px 22px;
+        font-weight: 500;
+        color: var(--apple-blue);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-apple-outline:hover {
+        background: var(--apple-blue);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .steps-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--apple-border);
+      }
+
+      .step-item:last-child {
+        border-bottom: none;
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        background: var(--apple-blue);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 1rem;
+      }
+
+      .step-text {
+        flex: 1;
+        font-weight: 500;
+        color: var(--apple-text);
+      }
+
+      .container {
+        max-width: 1200px;
+      }
+
+      .api-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .api-endpoint {
+        background: var(--apple-light-gray);
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-family: 'SF Mono', Monaco, monospace;
+        font-size: 0.9rem;
+        color: var(--apple-blue);
+        margin: 0.5rem 0;
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        
+        .hero-section {
+          padding: 60px 20px;
+          margin: 20px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/static/index.html">
+          <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/static/index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/cours.html">Cours</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/planning.html">Planning</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/scores.html">Scores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/parametres.html">Paramètres</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <h1 class="hero-title">Calendrier de Révisions</h1>
+        <p class="hero-subtitle">
+          Organisez vos révisions de manière intelligente avec un planning personnalisé basé sur vos cours et priorités.
+        </p>
+        <a href="/static/cours.html" class="btn-apple">
+          <i class="fas fa-rocket me-2"></i>Commencer
+        </a>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3 class="feature-title">Gérer les Cours</h3>
+            <p class="feature-text">
+              Ajoutez vos cours avec leurs priorités et générez automatiquement un planning de révisions optimisé.
+            </p>
+            <a href="/static/cours.html" class="btn-apple">Gérer les Cours</a>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3 class="feature-title">Voir le Planning</h3>
+            <p class="feature-text">
+              Consultez votre planning de révisions avec une vue calendrier intuitive et marquez vos progrès.
+            </p>
+            <a href="/static/planning.html" class="btn-apple">Voir le Planning</a>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <h3 class="feature-title">Paramètres</h3>
+            <p class="feature-text">
+              Configurez vos préférences de révision, durées et disponibilités selon vos besoins.
+            </p>
+            <a href="/static/parametres.html" class="btn-apple-outline">Paramètres</a>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-layer-group"></i>
+            </div>
+            <h3 class="feature-title">CardCamille</h3>
+            <p class="feature-text">
+              Créez des cartes de révision et des QCM à partir de fichiers CSV. Parfait pour l'apprentissage.
+            </p>
+            <a href="/static/cardcamille/index.html" class="btn-apple">CardCamille</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- How it works and API -->
+      <div class="row mt-5">
+        <div class="col-lg-8">
+          <div class="steps-card">
+            <h3 class="feature-title mb-4">
+              <i class="fas fa-info-circle me-2"></i>Comment ça marche ?
+            </h3>
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-text">Créez un examen avec sa date limite</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-text">Ajoutez vos cours avec leurs priorités (0-10)</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-text">Le planning se génère automatiquement</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">4</div>
+              <div class="step-text">Suivez vos révisions jour par jour</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">5</div>
+              <div class="step-text">Ajustez selon vos performances</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="api-card">
+            <h3 class="feature-title mb-4">
+              <i class="fas fa-code me-2"></i>API Disponible
+            </h3>
+            <div class="api-endpoint">GET /examens</div>
+            <p class="feature-text">Liste des examens</p>
+            
+            <div class="api-endpoint">POST /cours</div>
+            <p class="feature-text">Crée un cours et génère le planning</p>
+            
+            <div class="api-endpoint">GET /planning/date/&lt;YYYY-MM-DD&gt;</div>
+            <p class="feature-text">Planning du jour</p>
+            
+            <div class="api-endpoint">POST /scores</div>
+            <p class="feature-text">Ajoute un QCM et ajuste le planning</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

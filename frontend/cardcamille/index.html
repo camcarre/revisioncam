@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CardCamille</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="wrapper">
+        <div class="header-intro">
+          <h1>CardCamille</h1>
+          <p>Importez un CSV pour afficher vos cartes immédiatement. Aucune base de données nécessaire.</p>
+        </div>
+        <nav class="app-nav" aria-label="Navigation principale">
+          <a href="index.html" class="app-nav__link app-nav__link--active">Cartes</a>
+          <a href="qcm.html" class="app-nav__link">QCM</a>
+          <a href="../index.html" class="app-nav__link">← Retour au Calendrier</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrapper">
+      <section class="panel">
+        <h2>Importer des cartes</h2>
+        <p class="helper-text">
+          Sélectionnez un fichier CSV avec un en-tête (ex. <code>reference,title,description</code>). Les cartes seront affichées ci-dessous.
+        </p>
+        <label class="file-input">
+          <input type="file" id="csvInput" accept=".csv,text/csv" />
+          <span>Choisir un fichier CSV</span>
+        </label>
+        <div class="actions">
+          <button id="renderCards" type="button">Afficher les cartes</button>
+          <button id="clearCards" type="button">Effacer les cartes</button>
+          <label class="toggle">
+            <input type="checkbox" id="livePreview" checked />
+            <span>Aperçu automatique</span>
+          </label>
+        </div>
+        <p id="statusMessage" class="status" role="status" aria-live="polite"></p>
+        <details class="sample">
+          <summary>Format d'exemple</summary>
+          <pre><code>reference,title,description
+REF-001,Carte 1,Description de la carte 1
+REF-002,Carte 2,Une autre description
+REF-003,Carte 3,
+</code></pre>
+        </details>
+      </section>
+
+      <section class="panel cards-panel">
+        <div class="toolbar">
+          <h2>Cartes</h2>
+          <span id="cardCount" class="count">0 carte</span>
+        </div>
+        <div class="card-stage">
+          <button id="prevCard" class="stage-nav stage-nav--prev" type="button" aria-label="Carte précédente" disabled>
+            <span aria-hidden="true">&#8592;</span>
+          </button>
+          <div class="card-stage__viewport">
+            <div id="cardsContainer" class="card-stage__deck" aria-live="polite">
+              <div class="card-placeholder">
+                <p>Importez un fichier CSV pour afficher vos cartes ici.</p>
+              </div>
+            </div>
+            <div class="card-stage__actions">
+              <button id="flipCard" type="button" disabled>Retourner la carte</button>
+            </div>
+          </div>
+          <button id="nextCard" class="stage-nav stage-nav--next" type="button" aria-label="Carte suivante" disabled>
+            <span aria-hidden="true">&#8594;</span>
+          </button>
+        </div>
+        <template id="cardTemplate">
+          <article class="card-flip">
+            <div class="card-flip__inner">
+              <div class="card-face card-face--front">
+                <p class="card-reference card-reference--front"></p>
+                <h3 class="card-title card-title--front"></h3>
+                <p class="card-hint">Cliquez sur la carte ou utilisez « Retourner la carte » pour voir la description.</p>
+              </div>
+              <div class="card-face card-face--back">
+                <p class="card-reference card-reference--back"></p>
+                <h3 class="card-title card-title--back"></h3>
+                <p class="card-description"></p>
+              </div>
+            </div>
+          </article>
+        </template>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="wrapper">
+        <small>Prêt pour Render : déployez simplement ces fichiers statiques.</small>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

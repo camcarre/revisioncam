@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cours | Calendrier de Révisions</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --apple-blue: #007AFF;
+        --apple-gray: #F2F2F7;
+        --apple-dark-gray: #1C1C1E;
+        --apple-light-gray: #F9F9F9;
+        --apple-text: #1D1D1F;
+        --apple-text-secondary: #86868B;
+        --apple-border: #D2D2D7;
+        --apple-success: #34C759;
+        --apple-warning: #FF9500;
+        --apple-error: #FF3B30;
+        --apple-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        --apple-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+
+      * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%);
+        min-height: 100vh;
+        color: var(--apple-text);
+        line-height: 1.6;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--apple-border);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-brand {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: var(--apple-text) !important;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        color: var(--apple-text-secondary) !important;
+        transition: color 0.3s ease;
+      }
+
+      .nav-link:hover, .nav-link.active {
+        color: var(--apple-blue) !important;
+      }
+
+      .page-header {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--apple-shadow);
+        border: 1px solid var(--apple-border);
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--apple-text);
+        margin-bottom: 0.5rem;
+      }
+
+      .page-subtitle {
+        color: var(--apple-text-secondary);
+        font-size: 1.1rem;
+      }
+
+      .form-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .form-control, .form-select {
+        border: 2px solid var(--apple-border);
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .form-control:focus, .form-select:focus {
+        border-color: var(--apple-blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        background: white;
+      }
+
+      .btn-apple {
+        background: var(--apple-blue);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .btn-apple:hover {
+        background: #0056CC;
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .btn-apple-secondary {
+        background: transparent;
+        border: 2px solid var(--apple-blue);
+        border-radius: 12px;
+        padding: 10px 22px;
+        font-weight: 600;
+        color: var(--apple-blue);
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .btn-apple-secondary:hover {
+        background: var(--apple-blue);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .courses-list {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .course-item {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--apple-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .course-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+        border-color: var(--apple-blue);
+      }
+
+      .course-header {
+        display: flex;
+        justify-content: between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+
+      .course-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--apple-text);
+        margin: 0;
+      }
+
+      .course-type {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: auto;
+      }
+
+      .course-type.majeur {
+        background: rgba(255, 149, 0, 0.1);
+        color: var(--apple-warning);
+        border: 1px solid rgba(255, 149, 0, 0.3);
+      }
+
+      .course-type.mineur {
+        background: rgba(52, 199, 89, 0.1);
+        color: var(--apple-success);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+      }
+
+      .course-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .course-detail {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .course-detail-label {
+        font-size: 0.8rem;
+        color: var(--apple-text-secondary);
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+
+      .course-detail-value {
+        font-size: 0.95rem;
+        color: var(--apple-text);
+        font-weight: 600;
+      }
+
+      .priority-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--apple-border);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+      }
+
+      .priority-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--apple-success) 0%, var(--apple-warning) 50%, var(--apple-error) 100%);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+
+      .alert-apple {
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(20px);
+      }
+
+      .alert-success {
+        background: rgba(52, 199, 89, 0.1);
+        color: var(--apple-success);
+        border-left: 4px solid var(--apple-success);
+      }
+
+      .alert-danger {
+        background: rgba(255, 59, 48, 0.1);
+        color: var(--apple-error);
+        border-left: 4px solid var(--apple-error);
+      }
+
+      .modal-content {
+        border: none;
+        border-radius: 20px;
+        box-shadow: var(--apple-shadow-hover);
+      }
+
+      .modal-header {
+        border-bottom: 1px solid var(--apple-border);
+        border-radius: 20px 20px 0 0;
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .modal-body {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+      }
+
+      .modal-footer {
+        border-top: 1px solid var(--apple-border);
+        border-radius: 0 0 20px 20px;
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .back-link {
+        color: var(--apple-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #0056CC;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--apple-text-secondary);
+      }
+
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--apple-border);
+      }
+
+      @media (max-width: 768px) {
+        .course-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .course-type {
+          margin-left: 0;
+          margin-top: 0.5rem;
+        }
+        
+        .course-details {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/static/index.html">
+          <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/static/index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/static/cours.html">Cours</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/planning.html">Planning</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/scores.html">Scores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/parametres.html">Paramètres</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-4">
+      <!-- Page Header -->
+      <div class="page-header">
+        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+          <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+        </a>
+        <h1 class="page-title">Gestion des Cours</h1>
+        <p class="page-subtitle">Ajoutez et gérez vos cours pour générer automatiquement votre planning de révisions</p>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div id="alert-container"></div>
+
+      <!-- Add Course Form -->
+      <div class="form-card">
+        <h2 class="mb-4">
+          <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau cours
+        </h2>
+        <form id="course-form">
+          <div class="row g-3">
+        <div class="col-md-6">
+          <label for="exam" class="form-label">Examen</label>
+              <select id="exam" name="examen_id" class="form-select" required>
+                <option value="">Sélectionnez un examen</option>
+              </select>
+        </div>
+        <div class="col-md-6">
+          <label for="titre" class="form-label">Titre du cours</label>
+              <input id="titre" name="titre" type="text" class="form-control" placeholder="Ex: Physiologie - Rein" required />
+        </div>
+        <div class="col-md-4">
+              <label class="form-label">Type de cours</label>
+          <select id="type" name="type" class="form-select" required>
+                <option value="">Sélectionnez le type</option>
+            <option value="Majeur">Majeur</option>
+            <option value="Mineur">Mineur</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="date_j0" class="form-label">Date J0</label>
+          <input id="date_j0" name="date_j0" type="date" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+              <label for="duree" class="form-label">Durée initiale (min)</label>
+              <input id="duree" name="duree" type="number" class="form-control" min="10" step="5" placeholder="60" required />
+        </div>
+        <div class="col-md-6">
+              <label for="duree_estimee" class="form-label">Durée estimée révision (min)</label>
+              <input id="duree_estimee" name="duree_estimee" type="number" class="form-control" min="10" step="5" placeholder="30" />
+        </div>
+        <div class="col-md-6">
+          <label for="priorite" class="form-label">Indice de priorité (0-10)</label>
+              <input id="priorite" name="priorite_indice" type="number" min="0" max="10" class="form-control" placeholder="5" required />
+              <small class="text-muted">10 = très important, 0 = moins important</small>
+        </div>
+        <div class="col-12">
+              <button class="btn-apple" type="submit">
+                <i class="fas fa-plus me-2"></i>Créer le cours
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Existing Courses -->
+      <div class="courses-list">
+        <h2 class="mb-4">
+          <i class="fas fa-list me-2"></i>Cours existants
+        </h2>
+        <div id="courses-container">
+          <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <h4>Aucun cours trouvé</h4>
+            <p>Commencez par ajouter votre premier cours ci-dessus.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div class="modal fade" id="editCourseModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-edit me-2"></i>Modifier le cours
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-course-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="edit-exam" class="form-label">Examen</label>
+                  <select id="edit-exam" name="examen_id" class="form-select" required>
+                    <option value="">Sélectionnez un examen</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="edit-titre" class="form-label">Titre du cours</label>
+                  <input id="edit-titre" name="titre" type="text" class="form-control" required />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Type de cours</label>
+                  <select id="edit-type" name="type" class="form-select" required>
+                    <option value="Majeur">Majeur</option>
+                    <option value="Mineur">Mineur</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="edit-date_j0" class="form-label">Date J0</label>
+                  <input id="edit-date_j0" name="date_j0" type="date" class="form-control" required />
+                </div>
+                <div class="col-md-4">
+                  <label for="edit-duree" class="form-label">Durée initiale (min)</label>
+                  <input id="edit-duree" name="duree" type="number" class="form-control" min="10" step="5" required />
+                </div>
+                <div class="col-md-6">
+                  <label for="edit-duree_estimee" class="form-label">Durée estimée révision (min)</label>
+                  <input id="edit-duree_estimee" name="duree_estimee" type="number" class="form-control" min="10" step="5" />
+                </div>
+                <div class="col-md-6">
+                  <label for="edit-priorite" class="form-label">Indice de priorité (0-10)</label>
+                  <input id="edit-priorite" name="priorite_indice" type="number" min="0" max="10" class="form-control" required />
+                </div>
+        </div>
+      </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-apple-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn-apple" id="save-course-btn">
+              <i class="fas fa-save me-2"></i>Sauvegarder
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const BASE_URL = 'http://127.0.0.1:8000';
+      let currentEditingCourseId = null;
+
+      // DOM Elements
+      const courseForm = document.getElementById('course-form');
+      const editModal = new bootstrap.Modal(document.getElementById('editCourseModal'));
+      const editForm = document.getElementById('edit-course-form');
+      const saveCourseBtn = document.getElementById('save-course-btn');
+      const alertContainer = document.getElementById('alert-container');
+      const coursesContainer = document.getElementById('courses-container');
+
+      // Load exams for both forms
+      async function loadExamens() {
+        try {
+          const response = await fetch(`${BASE_URL}/examens/`);
+        const examens = await response.json();
+          
+          const examSelect = document.getElementById('exam');
+          const editExamSelect = document.getElementById('edit-exam');
+          
+          examSelect.innerHTML = '<option value="">Sélectionnez un examen</option>';
+          editExamSelect.innerHTML = '<option value="">Sélectionnez un examen</option>';
+          
+          examens.forEach(examen => {
+            const option = `<option value="${examen.id}">${examen.titre} - ${examen.date_exam}</option>`;
+            examSelect.innerHTML += option;
+            editExamSelect.innerHTML += option;
+          });
+        } catch (error) {
+          console.error('Erreur lors du chargement des examens:', error);
+          showAlert('Erreur lors du chargement des examens', 'danger');
+        }
+      }
+
+      // Load courses
+      async function loadCourses() {
+        try {
+          const response = await fetch(`${BASE_URL}/examens/`);
+          const examens = await response.json();
+          
+          if (examens.length === 0) {
+            coursesContainer.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h4>Aucun examen trouvé</h4>
+                <p>Créez d'abord un examen avant d'ajouter des cours.</p>
+              </div>
+            `;
+            return;
+          }
+
+          let allCourses = [];
+          for (const examen of examens) {
+            try {
+              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              if (coursesResponse.ok) {
+                const courses = await coursesResponse.json();
+                if (Array.isArray(courses)) {
+                  allCourses = allCourses.concat(courses.map(course => ({ ...course, examen_nom: examen.titre })));
+                }
+              } else {
+                console.warn(`Impossible de charger les cours pour l'examen ${examen.id} (${coursesResponse.status})`);
+              }
+            } catch (error) {
+              console.error(`Erreur lors du chargement des cours pour l'examen ${examen.id}:`, error);
+            }
+          }
+
+          if (allCourses.length === 0) {
+            coursesContainer.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h4>Aucun cours trouvé</h4>
+                <p>Commencez par ajouter votre premier cours ci-dessus.</p>
+              </div>
+            `;
+            return;
+          }
+
+          coursesContainer.innerHTML = allCourses.map(course => `
+            <div class="course-item">
+              <div class="course-header">
+                <h3 class="course-title">${course.titre}</h3>
+                <span class="course-type ${course.type.toLowerCase()}">${course.type}</span>
+              </div>
+              <div class="course-details">
+                <div class="course-detail">
+                  <span class="course-detail-label">Examen</span>
+                  <span class="course-detail-value">${course.examen_nom}</span>
+                </div>
+                <div class="course-detail">
+                  <span class="course-detail-label">Date J0</span>
+                  <span class="course-detail-value">${new Date(course.date_j0).toLocaleDateString('fr-FR')}</span>
+                </div>
+                <div class="course-detail">
+                  <span class="course-detail-label">Durée initiale</span>
+                  <span class="course-detail-value">${course.duree} min</span>
+                </div>
+                <div class="course-detail">
+                  <span class="course-detail-label">Durée estimée</span>
+                  <span class="course-detail-value">${course.duree_estimee || 'Non définie'} min</span>
+                </div>
+              </div>
+              <div class="course-detail">
+                <span class="course-detail-label">Priorité (${course.priorite_indice}/10)</span>
+                <div class="priority-bar">
+                  <div class="priority-fill" style="width: ${(course.priorite_indice / 10) * 100}%"></div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn-apple-secondary" onclick="editCourse(${course.id})">
+                  <i class="fas fa-edit me-2"></i>Modifier
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          console.error('Erreur lors du chargement des cours:', error);
+          showAlert('Erreur lors du chargement des cours', 'danger');
+        }
+      }
+
+      // Create course
+      courseForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(courseForm);
+        const courseData = Object.fromEntries(formData);
+        
+        try {
+          const response = await fetch(`${BASE_URL}/cours/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(courseData),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            showAlert('Cours créé avec succès ! Le planning a été automatiquement généré.', 'success');
+            courseForm.reset();
+            loadCourses();
+        } else {
+            const error = await response.json();
+            showAlert(`Erreur: ${error.detail || 'Impossible de créer le cours'}`, 'danger');
+          }
+        } catch (error) {
+          console.error('Erreur:', error);
+          showAlert('Erreur lors de la création du cours', 'danger');
+        }
+      });
+
+      // Edit course
+      async function editCourse(courseId) {
+        currentEditingCourseId = courseId;
+        
+        try {
+          const response = await fetch(`${BASE_URL}/examens/`);
+          const examens = await response.json();
+          
+          // Find the course data (we need to search through all examens)
+          let courseData = null;
+          for (const examen of examens) {
+            try {
+              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              const courses = await coursesResponse.json();
+              const course = courses.find(c => c.id === courseId);
+              if (course) {
+                courseData = course;
+                break;
+              }
+            } catch (error) {
+              console.error(`Erreur lors de la recherche du cours:`, error);
+            }
+          }
+
+          if (!courseData) {
+            showAlert('Cours non trouvé', 'danger');
+            return;
+          }
+
+          // Fill the edit form
+          document.getElementById('edit-exam').value = courseData.examen_id;
+          document.getElementById('edit-titre').value = courseData.titre;
+          document.getElementById('edit-type').value = courseData.type;
+          document.getElementById('edit-date_j0').value = courseData.date_j0;
+          document.getElementById('edit-duree').value = courseData.duree;
+          document.getElementById('edit-duree_estimee').value = courseData.duree_estimee || '';
+          document.getElementById('edit-priorite').value = courseData.priorite_indice;
+
+          editModal.show();
+        } catch (error) {
+          console.error('Erreur lors du chargement des données du cours:', error);
+          showAlert('Erreur lors du chargement des données du cours', 'danger');
+        }
+      }
+
+      // Save edited course
+      saveCourseBtn.addEventListener('click', async () => {
+        if (!currentEditingCourseId) return;
+
+        const formData = new FormData(editForm);
+        const courseData = Object.fromEntries(formData);
+        
+        try {
+          const response = await fetch(`${BASE_URL}/cours/${currentEditingCourseId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(courseData),
+          });
+
+          if (response.ok) {
+            showAlert('Cours modifié avec succès ! Le planning a été recalculé.', 'success');
+            editModal.hide();
+            loadCourses();
+            currentEditingCourseId = null;
+          } else {
+            const error = await response.json();
+            showAlert(`Erreur: ${error.detail || 'Impossible de modifier le cours'}`, 'danger');
+          }
+        } catch (error) {
+          console.error('Erreur:', error);
+          showAlert('Erreur lors de la modification du cours', 'danger');
+        }
+      });
+
+      // Show alert
+      function showAlert(message, type) {
+        alertContainer.innerHTML = `
+          <div class="alert alert-${type} alert-apple alert-${type}" role="alert">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+            ${message}
+          </div>
+        `;
+        
+        setTimeout(() => {
+          alertContainer.innerHTML = '';
+        }, 5000);
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+      loadExamens();
+        loadCourses();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CardCamille – QCM</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="wrapper">
+        <div class="header-intro">
+          <h1>CardCamille · QCM</h1>
+          <p>Importez un CSV pour générer des questionnaires à choix multiples. Les colonnes de réponses s'adaptent automatiquement.</p>
+        </div>
+        <nav class="app-nav" aria-label="Navigation principale">
+          <a href="index.html" class="app-nav__link">Cartes</a>
+          <a href="qcm.html" class="app-nav__link app-nav__link--active">QCM</a>
+          <a href="../index.html" class="app-nav__link">← Retour au Calendrier</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrapper">
+      <section class="panel">
+        <h2>Importer des QCM</h2>
+        <p class="helper-text">
+          Sélectionnez un fichier CSV contenant vos questions. Au minimum : <code>reference</code> et <code>question</code>.
+          Ajoutez autant de colonnes de réponses que nécessaire (ex. <code>choice_1</code>, <code>choice_2</code>, ...). Vous pouvez indiquer la bonne réponse avec une colonne <code>correct</code>.
+        </p>
+        <label class="file-input">
+          <input type="file" id="qcmCsvInput" accept=".csv,text/csv" />
+          <span>Choisir un fichier CSV</span>
+        </label>
+        <div class="actions">
+          <button id="renderQcm" type="button">Afficher les QCM</button>
+          <button id="clearQcm" type="button">Effacer</button>
+          <label class="toggle">
+            <input type="checkbox" id="qcmLivePreview" checked />
+            <span>Aperçu automatique</span>
+          </label>
+          <button id="revealAnswers" type="button" disabled>Afficher les réponses</button>
+        </div>
+        <p id="qcmStatus" class="status" role="status" aria-live="polite"></p>
+        <details class="sample">
+          <summary>Format d'exemple</summary>
+          <pre><code>reference,question,correct,choice_1,choice_2,choice_3,choice_4,pourquoi
+QCM-001,Quelle est la couleur du ciel ?,choice_2,Bleu,Rouge,Vert,Jaune,Le ciel apparaît bleu à cause de la diffusion de Rayleigh
+QCM-002,Combien font 2+2 ?,choice_1,4,3,5,,C'est une addition de base : 2 + 2 = 4
+QCM-003,Choisissez un animal marin,,Poisson,Chien,Pieuvre,Les poissons vivent dans l'eau et respirent par des branchies
+</code></pre>
+        </details>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <h2>Questions</h2>
+          <span id="qcmCount" class="count">0 question</span>
+        </div>
+        <div id="qcmContainer" class="qcm-list" aria-live="polite"></div>
+        <div id="qcmSummary" class="qcm-summary" aria-live="polite" hidden></div>
+        <template id="qcmTemplate">
+          <article class="qcm-card">
+            <header class="qcm-header">
+              <p class="qcm-reference"></p>
+              <h3 class="qcm-question"></h3>
+            </header>
+            <ol class="qcm-choices"></ol>
+            <div class="qcm-why" style="display: none;">
+              <h4>Pourquoi ?</h4>
+              <p class="qcm-why-text"></p>
+            </div>
+            <footer class="qcm-footer"></footer>
+          </article>
+        </template>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="wrapper">
+        <small>Prêt pour Render : déployez simplement ces fichiers statiques.</small>
+      </div>
+    </footer>
+
+    <script src="qcm.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+reference,question,correct,choice_1,choice_2,choice_3,choice_4,pourquoi
+QCM-001,Quelle est la fonction principale du rein ?,choice_1,Filtrer le sang et produire l'urine,Digérer les aliments,Produire les hormones,Transporter l'oxygène,Le rein filtre le sang pour éliminer les déchets et maintenir l'équilibre hydrique.
+QCM-002,Combien de cavités possède le cœur ?,choice_1,4 cavités,2 cavités,3 cavités,6 cavités,Le cœur a 2 oreillettes et 2 ventricules, soit 4 cavités au total.
+QCM-003,Quel est le principal produit de la glycolyse ?,choice_2,ATP,Acide pyruvique,CO2,Glucose,La glycolyse produit de l'acide pyruvique à partir du glucose.
+QCM-004,Quels sont les 4 principes de l'éthique médicale ?,choice_3,Bienfaisance; Non-malfaisance; Autonomie; Justice,Confidentialité; Consentement; Information; Respect,Bienfaisance; Non-malfaisance; Autonomie; Justice,Prudence; Courage; Tempérance; Justice,Les 4 principes fondamentaux sont bienfaisance, non-malfaisance, autonomie et justice.
+QCM-005,Quel est l'objectif de la santé publique ?,choice_1,Promouvoir la santé des populations,Soigner les malades,Former les médecins,Gérer les hôpitaux,La santé publique vise à améliorer la santé de l'ensemble de la population.

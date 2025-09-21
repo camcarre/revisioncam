@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paramètres | Calendrier de Révisions</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --apple-blue: #007AFF;
+        --apple-gray: #F2F2F7;
+        --apple-dark-gray: #1C1C1E;
+        --apple-light-gray: #F9F9F9;
+        --apple-text: #1D1D1F;
+        --apple-text-secondary: #86868B;
+        --apple-border: #D2D2D7;
+        --apple-success: #34C759;
+        --apple-warning: #FF9500;
+        --apple-error: #FF3B30;
+        --apple-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        --apple-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+
+      * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%);
+        min-height: 100vh;
+        color: var(--apple-text);
+        line-height: 1.6;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--apple-border);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-brand {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: var(--apple-text) !important;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        color: var(--apple-text-secondary) !important;
+        transition: color 0.3s ease;
+      }
+
+      .nav-link:hover, .nav-link.active {
+        color: var(--apple-blue) !important;
+      }
+
+      .page-header {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--apple-shadow);
+        border: 1px solid var(--apple-border);
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--apple-text);
+        margin-bottom: 0.5rem;
+      }
+
+      .page-subtitle {
+        color: var(--apple-text-secondary);
+        font-size: 1.1rem;
+      }
+
+      .settings-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-border);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--apple-shadow);
+      }
+
+      .card-header {
+        background: transparent;
+        border-bottom: 1px solid var(--apple-border);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--apple-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .card-subtitle {
+        color: var(--apple-text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      .param-row {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--apple-border);
+        transition: all 0.3s ease;
+      }
+
+      .param-row:last-child {
+        border-bottom: none;
+      }
+
+      .param-row:hover {
+        background: rgba(0, 122, 255, 0.05);
+        border-radius: 12px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .param-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .param-name {
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 0.25rem;
+      }
+
+      .param-description {
+        font-size: 0.9rem;
+        color: var(--apple-text-secondary);
+        margin-bottom: 0;
+      }
+
+      .param-input {
+        width: 120px;
+        margin-right: 1rem;
+      }
+
+      .form-control {
+        border: 2px solid var(--apple-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .form-control:focus {
+        border-color: var(--apple-blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        background: white;
+      }
+
+      .form-control:disabled {
+        background: var(--apple-light-gray);
+        color: var(--apple-text-secondary);
+        cursor: not-allowed;
+      }
+
+      .btn-apple {
+        background: var(--apple-blue);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .btn-apple:hover {
+        background: #0056CC;
+        transform: translateY(-1px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .btn-apple:disabled {
+        background: var(--apple-border);
+        color: var(--apple-text-secondary);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .btn-apple-secondary {
+        background: transparent;
+        border: 2px solid var(--apple-blue);
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-weight: 600;
+        color: var(--apple-blue);
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .btn-apple-secondary:hover {
+        background: var(--apple-blue);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .form-select {
+        border: 2px solid var(--apple-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .form-select:focus {
+        border-color: var(--apple-blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        background: white;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .table-apple {
+        background: transparent;
+      }
+
+      .table-apple th {
+        background: rgba(0, 122, 255, 0.1);
+        border: none;
+        color: var(--apple-text);
+        font-weight: 600;
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .table-apple td {
+        border: none;
+        border-bottom: 1px solid var(--apple-border);
+        padding: 1rem;
+        vertical-align: middle;
+      }
+
+      .table-apple tbody tr:hover {
+        background: rgba(0, 122, 255, 0.05);
+      }
+
+      .table-apple tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .availability-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .availability-item {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--apple-border);
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .availability-item:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+        box-shadow: var(--apple-shadow);
+      }
+
+      .day-label {
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .day-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--apple-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+      }
+
+      .alert-apple {
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(20px);
+      }
+
+      .alert-success {
+        background: rgba(52, 199, 89, 0.1);
+        color: var(--apple-success);
+        border-left: 4px solid var(--apple-success);
+      }
+
+      .alert-danger {
+        background: rgba(255, 59, 48, 0.1);
+        color: var(--apple-error);
+        border-left: 4px solid var(--apple-error);
+      }
+
+      .back-link {
+        color: var(--apple-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #0056CC;
+      }
+
+      .readonly-badge {
+        background: rgba(134, 134, 139, 0.1);
+        color: var(--apple-text-secondary);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        .param-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+        
+        .param-input {
+          width: 100%;
+          margin-right: 0;
+        }
+        
+        .availability-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/static/index.html">
+          <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/static/index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/cours.html">Cours</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/planning.html">Planning</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/static/scores.html">Scores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/static/parametres.html">Paramètres</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-4">
+      <!-- Page Header -->
+      <div class="page-header">
+        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+          <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+        </a>
+        <h1 class="page-title">Paramètres</h1>
+        <p class="page-subtitle">Configurez vos préférences de révision et adaptez l'algorithme à vos besoins</p>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div id="alert-container"></div>
+
+      <!-- 1. Paramètres globaux -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-cog me-2"></i>1. Paramètres globaux
+          </h2>
+          <p class="card-subtitle">Réglages généraux de l'app, valables pour tous les cours</p>
+        </div>
+        
+        <div id="global-params-container">
+          <!-- Les paramètres seront chargés ici -->
+        </div>
+      </div>
+
+      <!-- 2. Paramètres par examen -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-graduation-cap me-2"></i>2. Paramètres par examen
+          </h2>
+          <p class="card-subtitle">Paramètres spécifiques à chaque examen <span class="readonly-badge">Lecture seule</span></p>
+        </div>
+        
+        <div class="mb-4">
+          <label for="exam-select" class="form-label">Sélectionner un examen :</label>
+          <select id="exam-select" class="form-select">
+            <option value="">Choisissez un examen</option>
+          </select>
+        </div>
+        
+        <div id="exam-params-container">
+          <div class="text-center text-muted py-4">
+            <i class="fas fa-graduation-cap fa-2x mb-3"></i>
+            <p>Sélectionnez un examen pour voir ses paramètres</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Paramètres d'adaptation (QCM) -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-brain me-2"></i>3. Paramètres d'adaptation (QCM)
+          </h2>
+          <p class="card-subtitle">Définissent comment les scores influencent le planning</p>
+        </div>
+        
+        <div id="adaptation-params-container">
+          <!-- Les paramètres seront chargés ici -->
+        </div>
+      </div>
+
+      <!-- 4. Barème de révisions -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-chart-bar me-2"></i>4. Barème de révisions
+          </h2>
+          <p class="card-subtitle">Tableau définissant combien de révisions générer selon l'indice (0-10)</p>
+        </div>
+        
+      <div class="table-responsive">
+          <table class="table table-apple" id="bareme-table">
+          <thead>
+            <tr>
+                <th>Indice</th>
+                <th>Nb révisions</th>
+              <th></th>
+            </tr>
+          </thead>
+            <tbody>
+              <!-- Le barème sera chargé ici -->
+            </tbody>
+        </table>
+        </div>
+      </div>
+
+      <!-- 5. Disponibilités par jour de la semaine -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-calendar-week me-2"></i>5. Disponibilités par jour de la semaine
+          </h2>
+          <p class="card-subtitle">Définissez vos créneaux disponibles pour chaque jour de la semaine</p>
+        </div>
+        
+        <div class="availability-grid" id="weekly-availability-container">
+          <!-- Les disponibilités seront chargées ici -->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const BASE_URL = 'http://127.0.0.1:8000';
+
+      // Configuration des paramètres
+      const globalParamsConfig = [
+        { key: 'duree_min', label: 'Durée minimale', unit: 'min', description: 'Durée minimale d\'une révision (même pour les petits cours)', default: 30 },
+        { key: 'duree_max', label: 'Durée maximale', unit: 'min', description: 'Durée maximale d\'une révision (éviter les séances trop lourdes)', default: 70 },
+        { key: 'nb_max_par_j', label: 'Nombre max par jour', unit: 'cours', description: 'Nombre maximum de révisions par jour', default: 5 },
+        { key: 'nb_min_par_j', label: 'Nombre min par jour', unit: 'cours', description: 'Nombre minimum de révisions par jour (sauf jour off)', default: 1 },
+        { key: 'temps_pause', label: 'Temps de pause', unit: 'min', description: 'Pause entre deux séances (optionnel mais pratique)', default: 10 }
+      ];
+
+      const adaptationParamsConfig = [
+        { key: 'seuil_fail', label: 'Seuil échec', unit: '%', description: 'En dessous → rapprocher la prochaine révision', default: 60 },
+        { key: 'seuil_ok', label: 'Seuil réussite', unit: '%', description: 'Au-dessus → espacer la prochaine révision', default: 85 },
+        { key: 'bonus_fail', label: 'Bonus échec', unit: 'jours', description: 'Décalage appliqué si score < seuil_fail', default: -2 },
+        { key: 'bonus_ok', label: 'Bonus réussite', unit: 'jours', description: 'Décalage appliqué si score > seuil_ok', default: 2 }
+      ];
+
+      // DOM Elements
+      const alertContainer = document.getElementById('alert-container');
+      const examSelect = document.getElementById('exam-select');
+
+      // Load global parameters
+      async function loadGlobalParams() {
+        try {
+          const response = await fetch(`${BASE_URL}/parametres/`);
+          const params = await response.json();
+          
+          const container = document.getElementById('global-params-container');
+          container.innerHTML = globalParamsConfig.map(config => {
+            const param = params.find(p => p.cle === config.key);
+            const value = param ? param.valeur : config.default;
+            
+            return `
+              <div class="param-row">
+                <div class="param-info">
+                  <div class="param-name">${config.label} (${config.unit})</div>
+                  <div class="param-description">${config.description}</div>
+                </div>
+                <input type="text" class="form-control param-input" value="${value}" data-key="${config.key}" />
+                <button class="btn-apple" onclick="saveParam('${config.key}', this)">
+                  <i class="fas fa-save me-1"></i>Sauvegarder
+                </button>
+              </div>
+            `;
+          }).join('');
+        } catch (error) {
+          console.error('Erreur lors du chargement des paramètres globaux:', error);
+          showAlert('Erreur lors du chargement des paramètres globaux', 'danger');
+        }
+      }
+
+      // Load adaptation parameters
+      async function loadAdaptationParams() {
+        try {
+          const response = await fetch(`${BASE_URL}/parametres/`);
+        const params = await response.json();
+          
+          const container = document.getElementById('adaptation-params-container');
+          container.innerHTML = adaptationParamsConfig.map(config => {
+            const param = params.find(p => p.cle === config.key);
+            const value = param ? param.valeur : config.default;
+            
+            return `
+              <div class="param-row">
+                <div class="param-info">
+                  <div class="param-name">${config.label} (${config.unit})</div>
+                  <div class="param-description">${config.description}</div>
+                </div>
+                <input type="text" class="form-control param-input" value="${value}" data-key="${config.key}" />
+                <button class="btn-apple" onclick="saveParam('${config.key}', this)">
+                  <i class="fas fa-save me-1"></i>Sauvegarder
+                </button>
+              </div>
+            `;
+          }).join('');
+        } catch (error) {
+          console.error('Erreur lors du chargement des paramètres d\'adaptation:', error);
+          showAlert('Erreur lors du chargement des paramètres d\'adaptation', 'danger');
+        }
+      }
+
+      // Load exams
+      async function loadExamens() {
+        try {
+          const response = await fetch(`${BASE_URL}/examens/`);
+          const examens = await response.json();
+          
+          examSelect.innerHTML = '<option value="">Choisissez un examen</option>';
+          examens.forEach(examen => {
+            examSelect.innerHTML += `<option value="${examen.id}">${examen.titre} - ${new Date(examen.date_exam).toLocaleDateString('fr-FR')}</option>`;
+          });
+        } catch (error) {
+          console.error('Erreur lors du chargement des examens:', error);
+          showAlert('Erreur lors du chargement des examens', 'danger');
+        }
+      }
+
+      // Load exam parameters
+      async function loadExamParams(examId) {
+        try {
+          const response = await fetch(`${BASE_URL}/examens/${examId}`);
+          const examen = await response.json();
+          
+          const container = document.getElementById('exam-params-container');
+          container.innerHTML = `
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Date d'examen</div>
+                <div class="param-description">Date limite pour répartir les révisions</div>
+              </div>
+              <input type="date" class="form-control param-input" value="${examen.date_exam}" disabled />
+              <button class="btn-apple" disabled>
+                <i class="fas fa-lock me-1"></i>Lecture seule
+              </button>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Révision finale</div>
+                <div class="param-description">Dernière révision avant l'examen</div>
+              </div>
+              <input type="text" class="form-control param-input" value="7 jours avant" disabled />
+              <button class="btn-apple" disabled>
+                <i class="fas fa-lock me-1"></i>Lecture seule
+              </button>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Poids majeur</div>
+                <div class="param-description">Les cours majeurs comptent double dans la charge</div>
+              </div>
+              <input type="text" class="form-control param-input" value="x2" disabled />
+              <button class="btn-apple" disabled>
+                <i class="fas fa-lock me-1"></i>Lecture seule
+              </button>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Poids mineur</div>
+                <div class="param-description">Les cours mineurs comptent normal</div>
+              </div>
+              <input type="text" class="form-control param-input" value="x1" disabled />
+              <button class="btn-apple" disabled>
+                <i class="fas fa-lock me-1"></i>Lecture seule
+              </button>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Erreur lors du chargement des paramètres d\'examen:', error);
+          showAlert('Erreur lors du chargement des paramètres d\'examen', 'danger');
+        }
+      }
+
+      // Load bareme
+      async function loadBareme() {
+        try {
+          const response = await fetch(`${BASE_URL}/bareme/`);
+          const bareme = await response.json();
+          
+          const tbody = document.querySelector('#bareme-table tbody');
+          tbody.innerHTML = bareme.map(item => `
+            <tr>
+              <td><strong>${item.indice}</strong></td>
+              <td>
+                <input type="number" class="form-control" value="${item.nb_revisions}" 
+                       data-indice="${item.indice}" style="width: 100px;" />
+              </td>
+              <td>
+                <button class="btn-apple" onclick="saveBaremeItem(${item.indice}, this)">
+                  <i class="fas fa-save me-1"></i>Sauvegarder
+                </button>
+              </td>
+              </tr>
+          `).join('');
+        } catch (error) {
+          console.error('Erreur lors du chargement du barème:', error);
+          showAlert('Erreur lors du chargement du barème', 'danger');
+        }
+      }
+
+      // Create weekly availability interface
+      function createWeeklyAvailabilityInterface() {
+        const days = [
+          { key: 'lundi', label: 'Lundi', icon: '1' },
+          { key: 'mardi', label: 'Mardi', icon: '2' },
+          { key: 'mercredi', label: 'Mercredi', icon: '3' },
+          { key: 'jeudi', label: 'Jeudi', icon: '4' },
+          { key: 'vendredi', label: 'Vendredi', icon: '5' },
+          { key: 'samedi', label: 'Samedi', icon: '6' },
+          { key: 'dimanche', label: 'Dimanche', icon: '7' }
+        ];
+
+        const container = document.getElementById('weekly-availability-container');
+        container.innerHTML = days.map(day => `
+          <div class="availability-item">
+            <div class="day-label">
+              <div class="day-icon">${day.icon}</div>
+              ${day.label}
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Disponibilité (minutes)</label>
+              <input type="number" class="form-control weekly-availability-input" 
+                     id="${day.key}-availability" 
+                     data-day="${day.key}"
+                     min="0" step="30" 
+                     placeholder="Ex: 240" />
+              <div class="form-text">
+                <small class="text-muted">
+                  <i class="fas fa-magic me-1"></i>Sauvegarde automatique
+                </small>
+              </div>
+            </div>
+            <button class="btn-apple-secondary" onclick="saveWeeklyAvailability('${day.key}')">
+              <i class="fas fa-save me-1"></i>Sauvegarder
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // Load weekly availability
+      async function loadWeeklyAvailability() {
+        try {
+          // Valeurs par défaut
+          const defaultAvailability = {
+            'lundi': 240,
+            'mardi': 180, 
+            'mercredi': 300,
+            'jeudi': 120,
+            'vendredi': 240,
+            'samedi': 180,
+            'dimanche': 300
+          };
+          
+          // Essayer de charger depuis l'API
+          try {
+            const response = await fetch(`${BASE_URL}/disponibilite/weekly`);
+            if (response.ok) {
+              const apiAvailability = await response.json();
+              // Appliquer les valeurs de l'API
+              Object.keys(apiAvailability).forEach(day => {
+                const input = document.getElementById(`${day}-availability`);
+                if (input) {
+                  input.value = apiAvailability[day];
+                }
+              });
+              
+              // Ajouter les event listeners pour la sauvegarde automatique
+              setupAutoSaveListeners();
+              return; // Succès, on sort de la fonction
+            }
+          } catch (apiError) {
+            console.warn('API non disponible, utilisation des valeurs par défaut:', apiError);
+          }
+          
+          // Fallback: charger depuis le localStorage si l'API n'est pas disponible
+          const savedAvailability = JSON.parse(localStorage.getItem('weeklyAvailability') || '{}');
+          const finalAvailability = { ...defaultAvailability, ...savedAvailability };
+          
+          // Appliquer les valeurs
+          Object.keys(finalAvailability).forEach(day => {
+            const input = document.getElementById(`${day}-availability`);
+            if (input) {
+              input.value = finalAvailability[day];
+            }
+          });
+          
+          // Ajouter les event listeners pour la sauvegarde automatique
+          setupAutoSaveListeners();
+          
+        } catch (error) {
+          console.error('Erreur lors du chargement des disponibilités:', error);
+          showAlert('Erreur lors du chargement des disponibilités', 'danger');
+        }
+      }
+
+      // Save parameter
+      async function saveParam(key, button) {
+        const input = document.querySelector(`input[data-key="${key}"]`);
+        const value = input.value;
+        
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sauvegarde...';
+        
+        try {
+          const response = await fetch(`${BASE_URL}/parametres/${key}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ valeur: value }),
+          });
+
+          if (response.ok) {
+            showAlert('Paramètre sauvegardé avec succès', 'success');
+          } else {
+            const error = await response.json();
+            showAlert(`Erreur: ${error.detail || 'Impossible de sauvegarder le paramètre'}`, 'danger');
+            input.value = input.dataset.originalValue || '';
+          }
+        } catch (error) {
+          console.error('Erreur:', error);
+          showAlert('Erreur lors de la sauvegarde', 'danger');
+          input.value = input.dataset.originalValue || '';
+        } finally {
+          button.disabled = false;
+          button.innerHTML = '<i class="fas fa-save me-1"></i>Sauvegarder';
+        }
+      }
+
+      // Save bareme item
+      async function saveBaremeItem(indice, button) {
+        const input = document.querySelector(`input[data-indice="${indice}"]`);
+        const value = parseInt(input.value);
+        
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sauvegarde...';
+        
+        try {
+          const response = await fetch(`${BASE_URL}/bareme/${indice}`, {
+          method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nb_revisions: value }),
+          });
+
+          if (response.ok) {
+            showAlert('Barème sauvegardé avec succès', 'success');
+          } else {
+            const error = await response.json();
+            showAlert(`Erreur: ${error.detail || 'Impossible de sauvegarder le barème'}`, 'danger');
+          }
+        } catch (error) {
+          console.error('Erreur:', error);
+          showAlert('Erreur lors de la sauvegarde', 'danger');
+        } finally {
+          button.disabled = false;
+          button.innerHTML = '<i class="fas fa-save me-1"></i>Sauvegarder';
+        }
+      }
+
+      // Setup auto-save listeners for weekly availability
+      function setupAutoSaveListeners() {
+        const inputs = document.querySelectorAll('.weekly-availability-input');
+        console.log(`🔧 Configuration de la sauvegarde automatique pour ${inputs.length} inputs`);
+        
+        if (inputs.length === 0) {
+          console.warn('⚠️ Aucun input trouvé avec la classe weekly-availability-input');
+          return;
+        }
+        
+        // Éviter les doublons d'event listeners
+        inputs.forEach(input => {
+          // Vérifier si les event listeners sont déjà attachés
+          if (input.hasAttribute('data-autosave-configured')) {
+            console.log(`⏭️ Event listeners déjà configurés pour ${input.dataset.day}`);
+            return;
+          }
+          
+          // Marquer comme configuré
+          input.setAttribute('data-autosave-configured', 'true');
+          // Délai de sauvegarde automatique (en millisecondes)
+          let saveTimeout;
+          
+          input.addEventListener('input', () => {
+            console.log(`📝 Input détecté pour ${input.dataset.day}: ${input.value}`);
+            
+            // Annuler le timeout précédent s'il existe
+            if (saveTimeout) {
+              clearTimeout(saveTimeout);
+            }
+            
+            // Programmer une nouvelle sauvegarde après 1 seconde d'inactivité
+            saveTimeout = setTimeout(() => {
+              const day = input.dataset.day;
+              const value = parseInt(input.value) || 0;
+              
+              console.log(`⏰ Sauvegarde automatique programmée pour ${day}: ${value}`);
+              
+              // Validation rapide
+              if (value >= 0 && value <= 1440) {
+                saveWeeklyAvailabilitySilent(day, value);
+              } else {
+                console.warn(`❌ Valeur invalide pour ${day}: ${value}`);
+              }
+            }, 1000); // 1 seconde de délai
+          });
+          
+          // Sauvegarde immédiate quand l'utilisateur quitte le champ
+          input.addEventListener('blur', () => {
+            console.log(`👋 Blur détecté pour ${input.dataset.day}: ${input.value}`);
+            
+            if (saveTimeout) {
+              clearTimeout(saveTimeout);
+            }
+            
+            const day = input.dataset.day;
+            const value = parseInt(input.value) || 0;
+            
+            if (value >= 0 && value <= 1440) {
+              console.log(`💾 Sauvegarde immédiate pour ${day}: ${value}`);
+              saveWeeklyAvailabilitySilent(day, value);
+            } else {
+              console.warn(`❌ Valeur invalide pour ${day}: ${value}`);
+            }
+          });
+        });
+      }
+      
+      // Save weekly availability (silent version for auto-save)
+      async function saveWeeklyAvailabilitySilent(day, value) {
+        console.log(`🔄 Début de la sauvegarde silencieuse pour ${day}: ${value}`);
+        
+        try {
+          // Essayer de sauvegarder via l'API
+          try {
+            console.log(`🌐 Tentative de sauvegarde API pour ${day}: ${value}`);
+            
+            const response = await fetch(`${BASE_URL}/disponibilite/weekly/${day}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ dispo_min: value }),
+            });
+            
+            if (response.ok) {
+              console.log(`✅ Sauvegarde API réussie pour ${day}: ${value}`);
+              // Sauvegarde réussie - afficher un indicateur visuel discret
+              showAutoSaveIndicator(day, 'success');
+              return;
+            } else {
+              console.warn(`⚠️ Sauvegarde API échouée pour ${day}: ${response.status}`);
+            }
+          } catch (apiError) {
+            console.warn('❌ API non disponible, sauvegarde locale:', apiError);
+          }
+          
+          // Fallback: sauvegarder dans le localStorage
+          const weeklyAvailability = JSON.parse(localStorage.getItem('weeklyAvailability') || '{}');
+          weeklyAvailability[day] = value;
+          localStorage.setItem('weeklyAvailability', JSON.stringify(weeklyAvailability));
+          
+          showAutoSaveIndicator(day, 'warning');
+          
+        } catch (error) {
+          console.error('Erreur lors de la sauvegarde automatique:', error);
+          showAutoSaveIndicator(day, 'error');
+        }
+      }
+      
+      // Show auto-save indicator
+      function showAutoSaveIndicator(day, status) {
+        const input = document.getElementById(`${day}-availability`);
+        if (!input) return;
+        
+        // Créer ou mettre à jour l'indicateur
+        let indicator = input.parentNode.querySelector('.auto-save-indicator');
+        if (!indicator) {
+          indicator = document.createElement('small');
+          indicator.className = 'auto-save-indicator text-muted';
+          input.parentNode.appendChild(indicator);
+        }
+        
+        const dayLabel = day.charAt(0).toUpperCase() + day.slice(1);
+        const statusIcons = {
+          success: '✅',
+          warning: '⚠️',
+          error: '❌'
+        };
+        const statusTexts = {
+          success: 'Sauvegardé',
+          warning: 'Sauvegardé localement',
+          error: 'Erreur de sauvegarde'
+        };
+        
+        indicator.innerHTML = `${statusIcons[status]} ${statusTexts[status]}`;
+        indicator.style.color = status === 'success' ? '#28a745' : 
+                               status === 'warning' ? '#ffc107' : '#dc3545';
+        
+        // Masquer l'indicateur après 3 secondes
+        setTimeout(() => {
+          if (indicator) {
+            indicator.style.opacity = '0';
+            setTimeout(() => indicator.remove(), 300);
+          }
+        }, 3000);
+      }
+
+      // Save weekly availability
+      async function saveWeeklyAvailability(day) {
+        const input = document.getElementById(`${day}-availability`);
+        const value = parseInt(input.value) || 0;
+        
+        try {
+          // Validation
+          if (value < 0) {
+            showAlert('La disponibilité ne peut pas être négative', 'danger');
+            return;
+          }
+          
+          if (value > 1440) { // 24h en minutes
+            showAlert('La disponibilité ne peut pas dépasser 24h (1440 minutes)', 'danger');
+            return;
+          }
+          
+          // Essayer de sauvegarder via l'API
+          try {
+            const response = await fetch(`${BASE_URL}/disponibilite/weekly/${day}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ dispo_min: value }),
+            });
+            
+            if (response.ok) {
+              showAlert(`Disponibilité du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardée (${value} minutes)`, 'success');
+              return; // Succès, on sort
+            } else {
+              throw new Error(`Erreur API: ${response.status}`);
+            }
+          } catch (apiError) {
+            console.warn('API non disponible, sauvegarde locale:', apiError);
+          }
+          
+          // Fallback: sauvegarder dans le localStorage
+          const weeklyAvailability = JSON.parse(localStorage.getItem('weeklyAvailability') || '{}');
+          weeklyAvailability[day] = value;
+          localStorage.setItem('weeklyAvailability', JSON.stringify(weeklyAvailability));
+          
+          showAlert(`Disponibilité du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardée localement (${value} minutes)`, 'warning');
+          
+        } catch (error) {
+          console.error('Erreur:', error);
+          showAlert('Erreur lors de la sauvegarde', 'danger');
+        }
+      }
+
+      // Show alert
+      function showAlert(message, type) {
+        alertContainer.innerHTML = `
+          <div class="alert alert-${type} alert-apple alert-${type}" role="alert">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+            ${message}
+          </div>
+        `;
+        
+        setTimeout(() => {
+          alertContainer.innerHTML = '';
+        }, 5000);
+      }
+
+      // Event listeners
+      examSelect.addEventListener('change', (e) => {
+        if (e.target.value) {
+          loadExamParams(parseInt(e.target.value));
+        } else {
+          document.getElementById('exam-params-container').innerHTML = `
+            <div class="text-center text-muted py-4">
+              <i class="fas fa-graduation-cap fa-2x mb-3"></i>
+              <p>Sélectionnez un examen pour voir ses paramètres</p>
+            </div>
+          `;
+        }
+      });
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        loadGlobalParams();
+        loadAdaptationParams();
+        loadExamens();
+        loadBareme();
+        
+        // Créer d'abord l'interface, puis charger les données
+        createWeeklyAvailabilityInterface();
+        // Attendre que l'interface soit créée avant de charger les données
+        setTimeout(() => {
+          loadWeeklyAvailability();
+        }, 200); // Augmenter le délai pour être sûr
+      });
+    </script>
+  </body>
+</html>
