@@ -10,7 +10,7 @@ python --version
 
 # Installer les dépendances avec wheels pré-compilés
 echo "📦 Installation des dépendances (wheels pré-compilés)..."
-pip install --only-binary=all fastapi==0.95.2 uvicorn==0.22.0 SQLAlchemy==1.4.53 pydantic==1.10.12 python-dateutil==2.8.2
+pip install --only-binary=all fastapi==0.104.1 uvicorn==0.24.0 SQLAlchemy==2.0.23 pydantic==2.5.0 python-dateutil==2.8.2
 
 # Vérifier les imports
 echo "🔍 Test des imports..."
