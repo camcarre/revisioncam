@@ -50,6 +50,20 @@ func main() {
 	checkCmd.Stderr = os.Stderr
 	checkCmd.Run()
 	
+	// Debug: Chercher où sont installés les modules
+	fmt.Println("🔍 Debug: Recherche des modules dans tous les répertoires possibles...")
+	searchCmd := exec.Command("find", "/opt", "/usr", "/home", "-name", "uvicorn*", "-type", "d", "2>/dev/null")
+	searchCmd.Stdout = os.Stdout
+	searchCmd.Stderr = os.Stderr
+	searchCmd.Run()
+	
+	// Debug: Vérifier les variables d'environnement Python
+	fmt.Println("🔍 Debug: Variables d'environnement Python...")
+	envCmd := exec.Command(pythonCmd, "-c", "import os; print('PYTHONPATH:', os.environ.get('PYTHONPATH', 'Not set')); print('USER_BASE:', os.environ.get('USER_BASE', 'Not set'))")
+	envCmd.Stdout = os.Stdout
+	envCmd.Stderr = os.Stderr
+	envCmd.Run()
+	
 	// Debug: Vérifier si uvicorn est installé
 	fmt.Println("🔍 Debug: Test d'import uvicorn...")
 	importCmd := exec.Command(pythonCmd, "-c", "import uvicorn; print('uvicorn trouvé:', uvicorn.__file__)")
