@@ -9,12 +9,18 @@ import (
 )
 
 func main() {
-	// Vérifier si Python est disponible
-	pythonCmd := "python3"
-	if _, err := exec.LookPath("python3"); err != nil {
-		pythonCmd = "python"
-		if _, err := exec.LookPath("python"); err != nil {
-			log.Fatal("Python not found")
+	// Chercher Python 3.11 en priorité
+	pythonCmd := "/tmp/python311/bin/python3.11"
+	if _, err := exec.LookPath(pythonCmd); err != nil {
+		pythonCmd = "python3.11"
+		if _, err := exec.LookPath(pythonCmd); err != nil {
+			pythonCmd = "python3"
+			if _, err := exec.LookPath(pythonCmd); err != nil {
+				pythonCmd = "python"
+				if _, err := exec.LookPath(pythonCmd); err != nil {
+					log.Fatal("Python not found")
+				}
+			}
 		}
 	}
 
