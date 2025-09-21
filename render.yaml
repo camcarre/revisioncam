@@ -1,9 +1,9 @@
 services:
   - type: web
     name: revisioncam
-    env: python
-    buildCommand: ./build_render.sh
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    env: go
+    buildCommand: go build -o revisioncam main.go && ./build_render.sh
+    startCommand: ./revisioncam
     plan: free
     envVars:
       - key: PORT
