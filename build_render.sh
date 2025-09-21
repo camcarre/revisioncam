@@ -8,13 +8,9 @@ echo "================================"
 echo "📋 Version Python:"
 python --version
 
-# Installer pydantic-core pré-compilé d'abord
-echo "📦 Installation de pydantic-core pré-compilé..."
-pip install --only-binary=all pydantic-core==2.14.1
-
-# Installer les dépendances minimales
-echo "📦 Installation des dépendances..."
-pip install fastapi==0.104.1 uvicorn==0.24.0 SQLAlchemy==2.0.23 pydantic==2.5.0 python-dateutil==2.8.2
+# Installer les dépendances avec wheels pré-compilés
+echo "📦 Installation des dépendances (wheels pré-compilés)..."
+pip install --only-binary=all fastapi==0.95.2 uvicorn==0.22.0 SQLAlchemy==1.4.53 pydantic==1.10.12 python-dateutil==2.8.2
 
 # Vérifier les imports
 echo "🔍 Test des imports..."
