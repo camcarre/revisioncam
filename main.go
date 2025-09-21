@@ -55,9 +55,9 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	
-	// Ajouter le chemin des modules installés par pip (basé sur le debug)
+	// Ajouter le chemin des modules installés par pip (basé sur le warning)
 	cmd.Env = append(os.Environ(), 
-		"PYTHONPATH=/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:/opt/render/.local/lib/python3.11/site-packages:"+os.Getenv("PYTHONPATH"))
+		"PYTHONPATH=/opt/render/.local/lib/python3.11/site-packages:/usr/local/lib/python3.11/dist-packages:/usr/lib/python3/dist-packages:"+os.Getenv("PYTHONPATH"))
 
 	fmt.Println("🚀 Starting RevisionCam with Go wrapper...")
 	fmt.Printf("📋 Using Python: %s\n", pythonCmd)
