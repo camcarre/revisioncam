@@ -2,11 +2,12 @@ services:
   - type: web
     name: revisioncam
     env: python
-    buildCommand: pip install --upgrade pip && pip install -r requirements-minimal.txt
+    buildCommand: ./build_render.sh
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     plan: free
+    runtime: python-3.11
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.11.9
       - key: PORT
         value: 8000
