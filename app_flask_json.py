@@ -711,6 +711,10 @@ def create_score():
 def get_parametres():
     """Récupérer tous les paramètres"""
     parametres = json_manager.get_parametres()
+    # Si c'est déjà une liste, la retourner directement
+    if isinstance(parametres, list):
+        return jsonify(parametres)
+    # Sinon, convertir le dict en liste
     return jsonify([{"cle": k, "valeur": v} for k, v in parametres.items()])
 
 @app.route('/api/parametres/<key>', methods=['GET'])
