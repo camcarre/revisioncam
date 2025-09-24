@@ -1,0 +1,43 @@
+{
+  "examens": [
+    {
+      "id": 1,
+      "titre": "Examen Test",
+      "date_exam": "2025-12-25",
+      "type": "Partiel",
+      "coefficient": 3
+    }
+  ],
+  "cours": [
+    {
+      "titre": "Cours Test Modifié",
+      "type": "Majeur",
+      "priorite_indice": 8,
+      "examen_id": 1,
+      "duree_estimee": 60,
+      "date_j0": "2025-09-25",
+      "id": 1
+    }
+  ],
+  "planning": [],
+  "scores": [],
+  "parametres": [
+    {
+      "cle": "duree_min",
+      "valeur": 30
+    }
+  ],
+  "bareme": [
+    {
+      "indice": 0,
+      "nb_revisions": 1
+    }
+  ],
+  "disponibilites": [
+    {
+      "jour": "lundi",
+      "minutes": 480
+    }
+  ],
+  "planning_logs": []
+}

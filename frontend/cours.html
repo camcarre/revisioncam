@@ -17,6 +17,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+      /* Menu déroulant Card moderne */
+      .navbar {
+        z-index: 10000 !important;
+        position: relative !important;
+      }
+      
+      .dropdown-menu {
+        z-index: 9999 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid var(--apple-border) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--apple-shadow-hover) !important;
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        min-width: 200px !important;
+        animation: slideDown 0.3s ease-out !important;
+      }
+      
+      .dropdown-item {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        margin: 0.25rem 0 !important;
+        transition: all 0.2s ease !important;
+        color: var(--apple-text) !important;
+        font-weight: 500 !important;
+      }
+      
+      .dropdown-item:hover {
+        background: var(--apple-blue) !important;
+        color: white !important;
+        transform: translateX(4px) !important;
+      }
+      
+      .dropdown-item i {
+        margin-right: 0.75rem !important;
+        width: 16px !important;
+        text-align: center !important;
+      }
+      
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
       :root {
         --apple-blue: #007AFF;
         --apple-gray: #F2F2F7;
@@ -341,7 +392,7 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="/static/index.html">
+        <a class="navbar-brand" href="/index.html">
           <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
         </a>
         <button
@@ -355,19 +406,47 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/static/index.html">Accueil</a>
+              <a class="nav-link" href="/index.html">Accueil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/static/cours.html">Cours</a>
+              <a class="nav-link active" href="/cours.html">Cours</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/planning.html">Planning</a>
+              <a class="nav-link" href="/planning.html">Planning</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/scores.html">Scores</a>
+              <a class="nav-link" href="/scores.html">Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/parametres.html">Paramètres</a>
+              <a class="nav-link" href="/parametres.html">Paramètres</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="cardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Card
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="cardDropdown" style="z-index: 9999 !important;">
+                <li><a class="dropdown-item" href="/indexcardcamille.html">
+                  <i class="fas fa-cards-blank me-2"></i>Cartes
+                </a></li>
+                <li><a class="dropdown-item" href="/qcm.html">
+                  <i class="fas fa-question-circle me-2"></i>QCM
+                </a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-success btn-sm ms-2" onclick="exportData()">
+                <i class="fas fa-download me-1"></i>Export
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-primary btn-sm ms-1" onclick="importData()">
+                <i class="fas fa-upload me-1"></i>Import
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-danger btn-sm ms-2" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+              </button>
             </li>
           </ul>
         </div>
@@ -377,7 +456,7 @@
     <div class="container py-4">
       <!-- Page Header -->
       <div class="page-header">
-        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+        <a href="/index.html" class="back-link mb-3 d-inline-block">
           <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
         </a>
         <h1 class="page-title">Gestion des Cours</h1>
@@ -443,6 +522,25 @@
         <h2 class="mb-4">
           <i class="fas fa-list me-2"></i>Cours existants
         </h2>
+        
+        <!-- Filtre par examen -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label for="filter-exam" class="form-label">Filtrer par examen</label>
+            <select id="filter-exam" class="form-select">
+              <option value="">Tous les examens</option>
+            </select>
+          </div>
+          <div class="col-md-6 d-flex align-items-end gap-2">
+            <button id="refresh-courses" class="btn-apple btn-sm">
+              <i class="fas fa-sync-alt me-2"></i>Actualiser
+            </button>
+            <button id="show-all-courses" class="btn-apple btn-sm btn-outline-secondary">
+              <i class="fas fa-list me-2"></i>Tous les cours
+            </button>
+          </div>
+        </div>
+        
         <div id="courses-container">
           <div class="empty-state">
             <i class="fas fa-book-open"></i>
@@ -514,7 +612,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const BASE_URL = 'http://127.0.0.1:8000';
+      const BASE_URL = 'http://127.0.0.1:8080';
       let currentEditingCourseId = null;
 
       // DOM Elements
@@ -524,11 +622,14 @@
       const saveCourseBtn = document.getElementById('save-course-btn');
       const alertContainer = document.getElementById('alert-container');
       const coursesContainer = document.getElementById('courses-container');
+      const filterExamSelect = document.getElementById('filter-exam');
+      const refreshCoursesBtn = document.getElementById('refresh-courses');
+      const showAllCoursesBtn = document.getElementById('show-all-courses');
 
       // Load exams for both forms
       async function loadExamens() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
         const examens = await response.json();
           
           const examSelect = document.getElementById('exam');
@@ -548,10 +649,28 @@
         }
       }
 
-      // Load courses
-      async function loadCourses() {
+      // Load exams for filter
+      async function loadExamensForFilter() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
+          const examens = await response.json();
+          
+          // Populate filter exam select
+          filterExamSelect.innerHTML = '<option value="">Tous les examens</option>';
+          
+          examens.forEach(examen => {
+            const option = `<option value="${examen.id}">${examen.titre} - ${examen.date_exam}</option>`;
+            filterExamSelect.innerHTML += option;
+          });
+        } catch (error) {
+          console.error('Erreur lors du chargement des examens pour le filtre:', error);
+        }
+      }
+
+      // Load courses
+      async function loadCourses(examId = null) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/examens`);
           const examens = await response.json();
           
           if (examens.length === 0) {
@@ -566,9 +685,11 @@
           }
 
           let allCourses = [];
-          for (const examen of examens) {
+          const examsToProcess = examId ? examens.filter(ex => ex.id == examId) : examens;
+          
+          for (const examen of examsToProcess) {
             try {
-              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              const coursesResponse = await fetch(`${BASE_URL}/api/cours?examen_id=${examen.id}`);
               if (coursesResponse.ok) {
                 const courses = await coursesResponse.json();
                 if (Array.isArray(courses)) {
@@ -644,7 +765,7 @@
         const courseData = Object.fromEntries(formData);
         
         try {
-          const response = await fetch(`${BASE_URL}/cours/`, {
+          const response = await fetch(`${BASE_URL}/api/cours`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -656,7 +777,15 @@
             const result = await response.json();
             showAlert('Cours créé avec succès ! Le planning a été automatiquement généré.', 'success');
             courseForm.reset();
-            loadCourses();
+            
+            // Recharger les examens dans le filtre pour s'assurer qu'ils sont à jour
+            await loadExamensForFilter();
+            
+            // Sélectionner automatiquement l'examen du cours créé dans le filtre
+            filterExamSelect.value = result.examen_id;
+            
+            // Recharger les cours pour l'examen sélectionné
+            loadCourses(result.examen_id);
         } else {
             const error = await response.json();
             showAlert(`Erreur: ${error.detail || 'Impossible de créer le cours'}`, 'danger');
@@ -672,14 +801,14 @@
         currentEditingCourseId = courseId;
         
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
           const examens = await response.json();
           
           // Find the course data (we need to search through all examens)
           let courseData = null;
           for (const examen of examens) {
             try {
-              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              const coursesResponse = await fetch(`${BASE_URL}/api/cours?examen_id=${examen.id}`);
               const courses = await coursesResponse.json();
               const course = courses.find(c => c.id === courseId);
               if (course) {
@@ -720,7 +849,7 @@
         const courseData = Object.fromEntries(formData);
         
         try {
-          const response = await fetch(`${BASE_URL}/cours/${currentEditingCourseId}`, {
+          const response = await fetch(`${BASE_URL}/api/cours/${currentEditingCourseId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -731,7 +860,10 @@
           if (response.ok) {
             showAlert('Cours modifié avec succès ! Le planning a été recalculé.', 'success');
             editModal.hide();
-            loadCourses();
+            
+            // Recharger les cours en respectant le filtre actuel
+            const selectedExamId = filterExamSelect.value;
+            loadCourses(selectedExamId || null);
             currentEditingCourseId = null;
           } else {
             const error = await response.json();
@@ -757,10 +889,27 @@
         }, 5000);
       }
 
+      // Event listeners pour le filtre
+      filterExamSelect.addEventListener('change', () => {
+        const selectedExamId = filterExamSelect.value;
+        loadCourses(selectedExamId || null);
+      });
+      
+      refreshCoursesBtn.addEventListener('click', () => {
+        const selectedExamId = filterExamSelect.value;
+        loadCourses(selectedExamId || null);
+      });
+      
+      showAllCoursesBtn.addEventListener('click', () => {
+        filterExamSelect.value = '';
+        loadCourses(null);
+      });
+
       // Initialize
-      document.addEventListener('DOMContentLoaded', () => {
-      loadExamens();
-        loadCourses();
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadExamens();
+        await loadExamensForFilter();
+        loadCourses(); // Charger tous les cours par défaut
       });
     </script>
   <script>
@@ -769,12 +918,15 @@
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       
       if (!isLoggedIn) {
-        window.location.href = '/static/login.html';
+        window.location.href = '/login.html';
         return;
       }
       
       console.log('Page cours chargée - Utilisateur connecté');
     });
-  </script>
+    </script>
+    
+    <!-- Auth JS -->
+    <script src="/auth.js"></script>
   </body>
 </html>

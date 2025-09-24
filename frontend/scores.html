@@ -17,6 +17,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+      /* Menu déroulant Card moderne */
+      .navbar {
+        z-index: 10000 !important;
+        position: relative !important;
+      }
+      
+      .dropdown-menu {
+        z-index: 9999 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid var(--apple-border) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--apple-shadow-hover) !important;
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        min-width: 200px !important;
+        animation: slideDown 0.3s ease-out !important;
+      }
+      
+      .dropdown-item {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        margin: 0.25rem 0 !important;
+        transition: all 0.2s ease !important;
+        color: var(--apple-text) !important;
+        font-weight: 500 !important;
+      }
+      
+      .dropdown-item:hover {
+        background: var(--apple-blue) !important;
+        color: white !important;
+        transform: translateX(4px) !important;
+      }
+      
+      .dropdown-item i {
+        margin-right: 0.75rem !important;
+        width: 16px !important;
+        text-align: center !important;
+      }
+      
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
       :root {
         --apple-blue: #007AFF;
         --apple-gray: #F2F2F7;
@@ -385,7 +436,7 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="/static/index.html">
+        <a class="navbar-brand" href="/index.html">
           <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
         </a>
         <button
@@ -399,19 +450,37 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/static/index.html">Accueil</a>
+              <a class="nav-link" href="/index.html">Accueil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/cours.html">Cours</a>
+              <a class="nav-link" href="/cours.html">Cours</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/planning.html">Planning</a>
+              <a class="nav-link" href="/planning.html">Planning</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/static/scores.html">Scores</a>
+              <a class="nav-link active" href="/scores.html">Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/parametres.html">Paramètres</a>
+              <a class="nav-link" href="/parametres.html">Paramètres</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="cardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Card
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="cardDropdown" style="z-index: 1050;">
+                <li><a class="dropdown-item" href="/indexcardcamille.html">
+                  <i class="fas fa-cards-blank me-2"></i>Cartes
+                </a></li>
+                <li><a class="dropdown-item" href="/qcm.html">
+                  <i class="fas fa-question-circle me-2"></i>QCM
+                </a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-danger btn-sm ms-2" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+              </button>
             </li>
           </ul>
         </div>
@@ -421,7 +490,7 @@
     <div class="container py-4">
       <!-- Page Header -->
       <div class="page-header">
-        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+        <a href="/index.html" class="back-link mb-3 d-inline-block">
           <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
         </a>
         <h1 class="page-title">Scores et Performances</h1>
@@ -503,7 +572,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const BASE_URL = 'http://127.0.0.1:8000';
+      const BASE_URL = 'http://127.0.0.1:8080';
 
       // DOM Elements
       const scoreForm = document.getElementById('score-form');
@@ -514,7 +583,7 @@
       // Load courses for dropdown
       async function loadCourses() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
         const examens = await response.json();
           
           const courseSelect = document.getElementById('courseSelect');
@@ -522,7 +591,7 @@
           
           for (const examen of examens) {
             try {
-              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              const coursesResponse = await fetch(`${BASE_URL}/api/cours?examen_id=${examen.id}`);
               if (coursesResponse.ok) {
                 const courses = await coursesResponse.json();
                 if (Array.isArray(courses)) {
@@ -546,9 +615,15 @@
       // Load scores
       async function loadScores() {
         try {
-          // Note: L'API ne semble pas avoir d'endpoint pour récupérer tous les scores
-          // On va simuler avec des données ou créer un endpoint si nécessaire
-          const scores = []; // Placeholder pour l'instant
+          console.log('📊 Chargement des scores...');
+          const response = await fetch(`${BASE_URL}/api/scores`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const scores = await response.json();
+          console.log('📊 Scores chargés:', scores);
           
           if (scores.length === 0) {
             scoresContainer.innerHTML = `
@@ -651,7 +726,7 @@
         const scoreData = Object.fromEntries(formData);
         
         try {
-          const response = await fetch(`${BASE_URL}/scores/`, {
+          const response = await fetch(`${BASE_URL}/api/scores`, {
           method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -661,7 +736,22 @@
 
           if (response.ok) {
             const result = await response.json();
-            showAlert('Score ajouté avec succès ! Le planning a été ajusté automatiquement.', 'success');
+            
+            // Message adaptatif selon le score
+            const score = parseInt(scoreData.score);
+            const total = parseInt(scoreData.total);
+            const ratio = score / total;
+            
+            let message = 'Score ajouté avec succès ! ';
+            if (ratio < 0.6) {
+              message += '📈 Planning ajusté : révision supplémentaire ajoutée (score < 60%)';
+            } else if (ratio >= 0.85) {
+              message += '🎯 Planning optimisé : révisions espacées (score ≥ 85%)';
+            } else {
+              message += '✅ Planning maintenu (score correct)';
+            }
+            
+            showAlert(message, 'success');
             scoreForm.reset();
             loadScores();
             loadStatistics();
@@ -705,12 +795,15 @@
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
         
         if (!isLoggedIn) {
-          window.location.href = '/static/login.html';
+          window.location.href = '/login.html';
           return;
         }
         
         console.log('Page scores chargée - Utilisateur connecté');
       });
     </script>
+    
+    <!-- Auth JS -->
+    <script src="/auth.js"></script>
   </body>
 </html>

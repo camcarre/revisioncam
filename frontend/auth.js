@@ -59,7 +59,7 @@ function logout() {
 function redirectToLogin() {
   // Éviter les redirections en boucle
   if (!window.location.pathname.includes('login.html')) {
-    window.location.href = '/static/login.html';
+    window.location.href = '/login.html';
   }
 }
 

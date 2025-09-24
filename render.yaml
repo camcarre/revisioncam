@@ -1,10 +1,13 @@
 services:
   - type: web
     name: revisioncam
-    env: python3
+    env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    plan: free
+    startCommand: gunicorn app_flask_json:app --bind 0.0.0.0:$PORT
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: PORT
-        value: 8000
+        value: 10000
+    healthCheckPath: /api/examens
+    plan: free

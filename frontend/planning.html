@@ -17,6 +17,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+      /* Menu déroulant Card moderne */
+      .navbar {
+        z-index: 10000 !important;
+        position: relative !important;
+      }
+      
+      .dropdown-menu {
+        z-index: 9999 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid var(--apple-border) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--apple-shadow-hover) !important;
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        min-width: 200px !important;
+        animation: slideDown 0.3s ease-out !important;
+      }
+      
+      .dropdown-item {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        margin: 0.25rem 0 !important;
+        transition: all 0.2s ease !important;
+        color: var(--apple-text) !important;
+        font-weight: 500 !important;
+      }
+      
+      .dropdown-item:hover {
+        background: var(--apple-blue) !important;
+        color: white !important;
+        transform: translateX(4px) !important;
+      }
+      
+      .dropdown-item i {
+        margin-right: 0.75rem !important;
+        width: 16px !important;
+        text-align: center !important;
+      }
+      
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
       :root {
         --apple-blue: #007AFF;
         --apple-gray: #F2F2F7;
@@ -390,7 +441,7 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="/static/index.html">
+        <a class="navbar-brand" href="/index.html">
           <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
         </a>
         <button
@@ -404,19 +455,47 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/static/index.html">Accueil</a>
+              <a class="nav-link" href="/index.html">Accueil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/cours.html">Cours</a>
+              <a class="nav-link" href="/cours.html">Cours</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/static/planning.html">Planning</a>
+              <a class="nav-link active" href="/planning.html">Planning</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/scores.html">Scores</a>
+              <a class="nav-link" href="/scores.html">Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/parametres.html">Paramètres</a>
+              <a class="nav-link" href="/parametres.html">Paramètres</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="cardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Card
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="cardDropdown" style="z-index: 9999 !important;">
+                <li><a class="dropdown-item" href="/indexcardcamille.html">
+                  <i class="fas fa-cards-blank me-2"></i>Cartes
+                </a></li>
+                <li><a class="dropdown-item" href="/qcm.html">
+                  <i class="fas fa-question-circle me-2"></i>QCM
+                </a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-success btn-sm ms-2" onclick="exportData()">
+                <i class="fas fa-download me-1"></i>Export
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-primary btn-sm ms-1" onclick="importData()">
+                <i class="fas fa-upload me-1"></i>Import
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-danger btn-sm ms-2" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+              </button>
             </li>
           </ul>
         </div>
@@ -426,7 +505,7 @@
     <div class="container py-4">
       <!-- Page Header -->
       <div class="page-header">
-        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+        <a href="/index.html" class="back-link mb-3 d-inline-block">
           <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
         </a>
         <h1 class="page-title">Planning de Révisions</h1>
@@ -447,9 +526,17 @@
             <input type="date" id="dateInput" class="form-control" />
           </div>
           <div class="col-md-4">
-            <button id="btnDate" class="btn-apple">
-              <i class="fas fa-calendar me-2"></i>Aller à cette semaine
-            </button>
+            <div class="d-flex gap-2">
+              <button id="btnDate" class="btn-apple">
+                <i class="fas fa-calendar me-2"></i>Aller à cette semaine
+              </button>
+              <button class="btn-apple btn-warning" onclick="detectConflicts()">
+                <i class="fas fa-exclamation-triangle me-2"></i>Conflits
+              </button>
+              <button class="btn-apple btn-success" onclick="autoRebalance()">
+                <i class="fas fa-balance-scale me-2"></i>Rééquilibrer
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -527,12 +614,40 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const BASE_URL = 'http://127.0.0.1:8000';
+      const BASE_URL = 'http://127.0.0.1:8080';
+      
+      // Gestion globale des erreurs de requête
+      window.addEventListener('error', function(e) {
+        if (e.filename && e.filename.includes('planning.html')) {
+          console.error('🚨 Erreur globale détectée:', {
+            message: e.message,
+            filename: e.filename,
+            lineno: e.lineno,
+            colno: e.colno,
+            error: e.error
+          });
+        }
+      });
+      
+      // Gestion des erreurs de requête fetch
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        return originalFetch.apply(this, args)
+          .catch(error => {
+            console.error('🚨 Erreur de requête fetch:', {
+              url: args[0],
+              error: error.message,
+              stack: error.stack
+            });
+            throw error;
+          });
+      };
       
       // State
       let currentWeekStart = getWeekStart(new Date());
       let planningData = [];
       let courseTitles = {};
+      let currentExamId = null;
 
       // DOM Elements
       const examSelect = document.getElementById('examSelect');
@@ -546,7 +661,7 @@
       // Load exams
       async function loadExamens() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
           const examens = await response.json();
           
           examSelect.innerHTML = '<option value="">Choisissez un examen</option>';
@@ -559,7 +674,8 @@
           const examParam = urlParams.get('exam');
           if (examParam) {
             examSelect.value = examParam;
-            await loadPlanningForExam(parseInt(examParam));
+            currentExamId = parseInt(examParam);
+            await loadPlanningForExam(currentExamId);
           }
         } catch (error) {
           console.error('Erreur lors du chargement des examens:', error);
@@ -568,9 +684,26 @@
 
       // Load planning for specific exam
       async function loadPlanningForExam(examId) {
+        if (!examId) {
+          console.log('⚠️ Aucun ID d\'examen fourni pour le chargement du planning');
+          return;
+        }
+        
         try {
-          const response = await fetch(`${BASE_URL}/planning/exam/${examId}`);
+          console.log(`📡 Chargement du planning pour l'examen ${examId}`);
+          const response = await fetch(`${BASE_URL}/api/planning/exam/${examId}`);
+          
+          if (!response.ok) {
+            if (response.status === 404) {
+              console.log(`⚠️ Aucun planning trouvé pour l'examen ${examId}`);
+              planningData = [];
+              return;
+            }
+            throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+          }
+          
           planningData = await response.json();
+          console.log(`✅ Planning chargé pour l'examen ${examId}: ${planningData.length} éléments`);
           
           await loadCourseTitles();
           renderCalendar();
@@ -584,12 +717,12 @@
       // Load course titles
       async function loadCourseTitles() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
         const examens = await response.json();
           
           for (const examen of examens) {
             try {
-              const coursesResponse = await fetch(`${BASE_URL}/cours/${examen.id}`);
+              const coursesResponse = await fetch(`${BASE_URL}/api/cours?examen_id=${examen.id}`);
               const courses = await coursesResponse.json();
               courses.forEach(course => {
                 courseTitles[course.id] = course.titre;
@@ -680,31 +813,68 @@
         return 'low-priority';
       }
 
-      // Toggle planning item status
+      // Toggle planning item status avec menu contextuel
       async function togglePlanningItemStatus(itemId, currentStatus) {
-        const newStatus = currentStatus === 'Fait' ? 'À faire' : 'Fait';
+        const item = planningData.find(i => i.id === itemId);
+        if (!item) return;
+
+        // Menu contextuel pour choisir le statut
+        const action = await showStatusMenu(currentStatus);
+        if (!action) return;
+
+        let newStatus, newDate;
         
+        switch (action) {
+          case 'done':
+            newStatus = 'Fait';
+            newDate = new Date().toISOString().split('T')[0];
+            break;
+          case 'todo':
+            newStatus = 'À faire';
+            newDate = item.date_finale; // Garder la date originale
+            break;
+          case 'postpone':
+            const postponeDate = prompt(`Reporter au (YYYY-MM-DD) :`, item.date_finale);
+            if (!postponeDate) return;
+            newStatus = 'Reporté';
+            newDate = postponeDate;
+            break;
+          default:
+            return;
+        }
+
         try {
-          const response = await fetch(`${BASE_URL}/planning/${itemId}`, {
+          const response = await fetch(`${BASE_URL}/api/planning/${itemId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               statut: newStatus,
-              date_finale: new Date().toISOString().split('T')[0]
+              date_finale: newDate
             }),
           });
 
           if (response.ok) {
             // Update local data
-            const item = planningData.find(i => i.id === itemId);
-            if (item) {
-              item.statut = newStatus;
-            }
+            item.statut = newStatus;
+            item.date_finale = newDate;
             
             renderCalendar();
-            showToast(`Item marqué comme "${newStatus}"`);
+            
+            let message = '';
+            switch (newStatus) {
+              case 'Fait':
+                message = '✅ Révision marquée comme effectuée';
+                break;
+              case 'À faire':
+                message = '📝 Révision remise en attente';
+                break;
+              case 'Reporté':
+                message = `📅 Révision reportée au ${newDate}`;
+                break;
+            }
+            showToast(message, 'success');
           } else {
             showToast('Erreur lors de la mise à jour', 'error');
           }
@@ -712,6 +882,70 @@
           console.error('Erreur:', error);
           showToast('Erreur lors de la mise à jour', 'error');
         }
+      }
+
+      // Afficher menu de statut
+      async function showStatusMenu(currentStatus) {
+        return new Promise((resolve) => {
+          const menu = document.createElement('div');
+          menu.className = 'status-menu';
+          menu.innerHTML = `
+            <div class="status-option ${currentStatus !== 'Fait' ? '' : 'active'}" data-action="done">
+              <i class="fas fa-check-circle"></i> Marquer comme fait
+            </div>
+            <div class="status-option ${currentStatus !== 'À faire' ? '' : 'active'}" data-action="todo">
+              <i class="fas fa-clock"></i> Remettre en attente
+            </div>
+            <div class="status-option" data-action="postpone">
+              <i class="fas fa-calendar-plus"></i> Reporter
+            </div>
+          `;
+          
+          // Styles
+          menu.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10000;
+            min-width: 250px;
+            padding: 10px 0;
+          `;
+          
+          const overlay = document.createElement('div');
+          overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+          `;
+          
+          document.body.appendChild(overlay);
+          document.body.appendChild(menu);
+          
+          // Event listeners
+          menu.addEventListener('click', (e) => {
+            const option = e.target.closest('.status-option');
+            if (option) {
+              const action = option.dataset.action;
+              document.body.removeChild(overlay);
+              document.body.removeChild(menu);
+              resolve(action);
+            }
+          });
+          
+          overlay.addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            document.body.removeChild(menu);
+            resolve(null);
+          });
+        });
       }
 
       // Show toast
@@ -739,8 +973,348 @@
         });
       }
 
+      // Nouvelles fonctions pour l'algorithme avancé
+      
+      // Fonction pour afficher un modal avec les conflits détectés
+         function showConflictsModal(conflicts) {
+           const modalHtml = `
+             <div class="modal fade" id="conflictsModal" tabindex="-1" style="z-index: 1060;">
+               <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                  <h5 class="modal-title">⚠️ Conflits Détectés</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-warning">
+                    <strong>⚠️ ${conflicts.length} jour(s) avec surcharge détectée(s)</strong><br>
+                    Ces jours dépassent les limites de révisions par jour pour l'examen sélectionné.
+                  </div>
+                  
+                  <h6>📋 Détails des conflits :</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Nb Révisions</th>
+                          <th>Durée Totale</th>
+                          <th>Examens Concernés</th>
+                          <th>Statut</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${conflicts.map(conflict => `
+                          <tr class="${conflict.nb_revisions > 4 ? 'table-danger' : 'table-warning'}">
+                            <td><strong>${formatDate(conflict.date_finale)}</strong></td>
+                            <td><span class="badge ${conflict.nb_revisions > 4 ? 'bg-danger' : 'bg-warning'}">${conflict.nb_revisions}</span></td>
+                            <td>${conflict.total_duree} min</td>
+                            <td>
+                              ${conflict.examens_noms ? conflict.examens_noms.join(', ') : 'N/A'}
+                            </td>
+                            <td>
+                              <span class="badge ${conflict.nb_revisions > 4 ? 'bg-danger' : 'bg-warning'}">
+                                ${conflict.nb_revisions > 4 ? 'Surcharge' : 'Charge élevée'}
+                              </span>
+                            </td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div class="mt-3">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                      📋 Fermer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Supprimer l'ancien modal s'il existe
+        const existingModal = document.getElementById('conflictsModal');
+        if (existingModal) {
+          existingModal.remove();
+        }
+        
+        // Ajouter le nouveau modal au DOM
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Afficher le modal
+        const modal = new bootstrap.Modal(document.getElementById('conflictsModal'));
+        modal.show();
+        
+        // Nettoyer le modal après fermeture
+        document.getElementById('conflictsModal').addEventListener('hidden.bs.modal', function() {
+          this.remove();
+        });
+      }
+
+      // Fonction pour afficher les changements du rééquilibrage
+      function showRebalanceChanges(planningBefore, planningAfter, adjustmentsCount, adjustmentDetails = []) {
+        console.log('🔍 Analyse des changements de rééquilibrage');
+        console.log('📊 Planning AVANT:', planningBefore);
+        console.log('📊 Planning APRÈS:', planningAfter);
+        
+        // Créer des maps pour faciliter la comparaison
+        const beforeMap = new Map();
+        const afterMap = new Map();
+        
+        planningBefore.forEach(item => {
+          beforeMap.set(item.id, item);
+        });
+        
+        planningAfter.forEach(item => {
+          afterMap.set(item.id, item);
+        });
+        
+        const changes = [];
+        
+        // Identifier les changements
+        for (const [id, afterItem] of afterMap) {
+          const beforeItem = beforeMap.get(id);
+          
+          if (beforeItem && beforeItem.date_finale !== afterItem.date_finale) {
+            changes.push({
+              type: 'moved',
+              item: afterItem,
+              oldDate: beforeItem.date_finale,
+              newDate: afterItem.date_finale
+            });
+          }
+        }
+        
+        console.log('🔄 Changements détectés:', changes);
+        console.log('📋 Détails des ajustements du serveur:', adjustmentDetails);
+        
+        // Utiliser les détails du serveur si disponibles, sinon utiliser l'analyse frontend
+        const finalChanges = adjustmentDetails.length > 0 ? adjustmentDetails : changes;
+        const finalCount = adjustmentDetails.length > 0 ? adjustmentDetails.length : adjustmentsCount;
+        
+        console.log('✅ Changements finaux à afficher:', finalChanges);
+        console.log('📊 Nombre final d\'ajustements:', finalCount);
+        
+        // Afficher un modal avec les changements
+        showRebalanceModal(finalChanges, finalCount);
+      }
+
+      // Fonction pour afficher un modal avec les changements
+      function showRebalanceModal(changes, adjustmentsCount) {
+        // Créer le modal
+        const modalHtml = `
+          <div class="modal fade" id="rebalanceModal" tabindex="-1" style="z-index: 1060;">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                  <h5 class="modal-title">🔄 Rééquilibrage Terminé</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-success">
+                    <strong>✅ ${adjustmentsCount} ajustement(s) effectué(s) !</strong>
+                  </div>
+                  
+                  ${changes.length > 0 ? `
+                    <h6>📋 Modifications apportées :</h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Cours</th>
+                            <th>Jalon</th>
+                            <th>Ancienne Date</th>
+                            <th>Nouvelle Date</th>
+                            <th>Durée</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${changes.map(change => `
+                            <tr>
+                              <td><strong>${change.cours_nom || change.item?.course_titre || 'Cours inconnu'}</strong></td>
+                              <td>${change.jalon || change.item?.jalon || 'N/A'}</td>
+                              <td><span class="badge bg-secondary">${formatDate(change.ancienne_date || change.oldDate)}</span></td>
+                              <td><span class="badge bg-primary">${formatDate(change.nouvelle_date || change.newDate)}</span></td>
+                              <td>${change.duree || change.item?.duree || 0} min</td>
+              </tr>
+                          `).join('')}
+                        </tbody>
+                      </table>
+                    </div>
+                  ` : `
+                    <div class="alert alert-info">
+                      <strong>ℹ️ Aucun déplacement visible</strong><br>
+                      Les ajustements ont été effectués en interne (optimisation des créneaux).
+                    </div>
+                  `}
+                  
+                  <div class="mt-3">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                      ✅ Compris
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Supprimer l'ancien modal s'il existe
+        const existingModal = document.getElementById('rebalanceModal');
+        if (existingModal) {
+          existingModal.remove();
+        }
+        
+        // Ajouter le nouveau modal au DOM
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Afficher le modal
+        const modal = new bootstrap.Modal(document.getElementById('rebalanceModal'));
+        modal.show();
+        
+        // Nettoyer le modal après fermeture
+        document.getElementById('rebalanceModal').addEventListener('hidden.bs.modal', function() {
+          this.remove();
+        });
+      }
+
+      // Fonction utilitaire pour formater les dates
+      function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR', {
+          weekday: 'short',
+          day: '2-digit',
+          month: '2-digit'
+        });
+      }
+
+      async function detectConflicts() {
+        console.log('🔍 Début de la détection des conflits');
+        
+        if (!currentExamId) {
+          console.log('❌ Aucun examen sélectionné pour la détection des conflits');
+          showToast('Veuillez sélectionner un examen d\'abord', 'warning');
+          return;
+        }
+
+        console.log('📚 Examen sélectionné pour détection des conflits:', currentExamId);
+
+        try {
+          showToast('Détection des conflits en cours...', 'info');
+          console.log('📡 Envoi de la requête de détection des conflits vers:', `${BASE_URL}/api/planning/conflicts`);
+          
+          const response = await fetch(`${BASE_URL}/api/planning/conflicts`);
+          console.log('📡 Réponse reçue:', response.status, response.statusText);
+          
+          if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+          }
+          
+          const conflicts = await response.json();
+          console.log('📊 Conflits détectés:', conflicts);
+          
+          // Filtrer les conflits pour ne montrer que ceux de l'examen sélectionné
+          const examConflicts = conflicts.filter(conflict => 
+            conflict.examens && conflict.examens.includes(currentExamId)
+          );
+          
+          console.log(`📋 Conflits pour l'examen ${currentExamId}:`, examConflicts);
+          
+          if (examConflicts.length === 0) {
+            console.log('✅ Aucun conflit détecté pour cet examen - planning équilibré');
+            showToast('✅ Aucun conflit détecté pour cet examen ! Planning équilibré.', 'success');
+          } else {
+            console.log(`⚠️ ${examConflicts.length} conflit(s) détecté(s) pour cet examen:`, examConflicts);
+            
+            // Afficher un modal détaillé avec les conflits de l'examen
+            showConflictsModal(examConflicts);
+            
+            // Proposer le rééquilibrage automatique
+            console.log('💭 Proposition de rééquilibrage automatique');
+            if (confirm('Voulez-vous rééquilibrer automatiquement le planning de cet examen ?')) {
+              console.log('✅ Utilisateur a accepté le rééquilibrage');
+              await autoRebalance();
+            } else {
+              console.log('❌ Utilisateur a refusé le rééquilibrage');
+            }
+          }
+        } catch (error) {
+          console.error('❌ Erreur lors de la détection des conflits:', error);
+          console.error('❌ Détails de l\'erreur:', {
+            message: error.message,
+            stack: error.stack,
+            url: `${BASE_URL}/api/planning/conflicts`
+          });
+          showToast(`Erreur lors de la détection des conflits: ${error.message}`, 'error');
+        }
+      }
+
+      async function autoRebalance() {
+        console.log('🔄 Début du rééquilibrage automatique');
+        
+        if (!currentExamId) {
+          console.log('❌ Aucun examen sélectionné pour le rééquilibrage');
+          showToast('Veuillez sélectionner un examen d\'abord', 'warning');
+          return;
+        }
+
+        console.log('📚 Examen sélectionné pour rééquilibrage:', currentExamId);
+
+        try {
+          showToast('Rééquilibrage automatique en cours...', 'info');
+          
+          // Capturer l'état AVANT le rééquilibrage (planning global)
+          console.log('📸 Capture de l\'état AVANT le rééquilibrage global');
+          const planningBefore = await fetch(`${BASE_URL}/api/planning/consolidated`)
+            .then(r => r.json())
+            .catch(() => []);
+          
+          console.log('📡 Envoi de la requête de rééquilibrage GLOBAL vers:', `${BASE_URL}/api/planning/rebalance-global`);
+          
+          const response = await fetch(`${BASE_URL}/api/planning/rebalance-global`, {
+            method: 'POST'
+          });
+          
+          console.log('📡 Réponse reçue:', response.status, response.statusText);
+          
+          if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+          }
+          
+          const result = await response.json();
+          console.log('📊 Résultat du rééquilibrage:', result);
+          
+          if (result.adjustments > 0) {
+            console.log(`✅ Rééquilibrage réussi: ${result.adjustments} ajustements effectués`);
+            
+            // Capturer l'état APRÈS le rééquilibrage
+            console.log('📸 Capture de l\'état APRÈS le rééquilibrage');
+            const planningAfter = await fetch(`${BASE_URL}/api/planning/exam/${currentExamId}`)
+              .then(r => r.json())
+              .catch(() => []);
+            
+            // Analyser et afficher les changements
+            showRebalanceChanges(planningBefore, planningAfter, result.adjustments, result.adjustment_details);
+            
+            console.log('🔄 Rechargement du planning pour l\'examen:', currentExamId);
+            loadPlanningForExam(currentExamId); // Recharger le planning
+          } else {
+            console.log('ℹ️ Aucun ajustement nécessaire - planning déjà équilibré');
+            showToast('✅ Aucun ajustement nécessaire. Planning déjà équilibré.', 'success');
+          }
+        } catch (error) {
+          console.error('❌ Erreur lors du rééquilibrage:', error);
+          showToast('Erreur lors du rééquilibrage automatique', 'error');
+        }
+      }
+
+
+
       // Helper functions
-      function formatDate(date) {
+      function formatDateHelper(date) {
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
       }
 
@@ -761,8 +1335,10 @@
 
       examSelect.addEventListener('change', (e) => {
         if (e.target.value) {
-          loadPlanningForExam(parseInt(e.target.value));
+          currentExamId = parseInt(e.target.value);
+          loadPlanningForExam(currentExamId);
         } else {
+          currentExamId = null;
           planningData = [];
           renderCalendar();
         }
@@ -790,12 +1366,90 @@
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       
       if (!isLoggedIn) {
-        window.location.href = '/static/login.html';
+        window.location.href = '/login.html';
         return;
       }
       
       console.log('Page planning chargée - Utilisateur connecté');
     });
+    
+    // Fonctions d'import et d'export
+    async function exportData() {
+      try {
+        const response = await fetch('/api/export');
+        if (!response.ok) {
+          throw new Error('Erreur lors de l\'export');
+        }
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `revisioncam_backup_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        showToast('Export réussi !', 'success');
+      } catch (error) {
+        console.error('Erreur export:', error);
+        showToast('Erreur lors de l\'export', 'error');
+      }
+    }
+    
+    function importData() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = async function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        try {
+          const text = await file.text();
+          const data = JSON.parse(text);
+          
+          if (!data.examens || !data.cours || !data.planning) {
+            throw new Error('Format de fichier invalide');
+          }
+          
+          if (!confirm('Êtes-vous sûr de vouloir importer ces données ? Cela écrasera toutes les données actuelles.')) {
+            return;
+          }
+          
+          const response = await fetch('/api/import', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: text
+          });
+          
+          if (!response.ok) {
+            throw new Error('Erreur lors de l\'import');
+          }
+          
+          const result = await response.json();
+          showToast('Import réussi !', 'success');
+          
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          
+        } catch (error) {
+          console.error('Erreur import:', error);
+          showToast('Erreur lors de l\'import: ' + error.message, 'error');
+        }
+      };
+      input.click();
+    }
+    
+    
     </script>
+    
+    <!-- Auth JS -->
+    <script src="/auth.js"></script>
   </body>
 </html>

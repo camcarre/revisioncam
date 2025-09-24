@@ -17,6 +17,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+      /* Menu déroulant Card moderne */
+      .navbar {
+        z-index: 10000 !important;
+        position: relative !important;
+      }
+      
+      .dropdown-menu {
+        z-index: 9999 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid var(--apple-border) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--apple-shadow-hover) !important;
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        min-width: 200px !important;
+        animation: slideDown 0.3s ease-out !important;
+      }
+      
+      .dropdown-item {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        margin: 0.25rem 0 !important;
+        transition: all 0.2s ease !important;
+        color: var(--apple-text) !important;
+        font-weight: 500 !important;
+      }
+      
+      .dropdown-item:hover {
+        background: var(--apple-blue) !important;
+        color: white !important;
+        transform: translateX(4px) !important;
+      }
+      
+      .dropdown-item i {
+        margin-right: 0.75rem !important;
+        width: 16px !important;
+        text-align: center !important;
+      }
+      
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      
       :root {
         --apple-blue: #007AFF;
         --apple-gray: #F2F2F7;
@@ -378,7 +429,7 @@
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="/static/index.html">
+        <a class="navbar-brand" href="/index.html">
           <i class="fas fa-calendar-alt me-2"></i>Calendrier de Révisions
         </a>
         <button
@@ -392,19 +443,37 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/static/index.html">Accueil</a>
+              <a class="nav-link" href="/index.html">Accueil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/cours.html">Cours</a>
+              <a class="nav-link" href="/cours.html">Cours</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/planning.html">Planning</a>
+              <a class="nav-link" href="/planning.html">Planning</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/static/scores.html">Scores</a>
+              <a class="nav-link" href="/scores.html">Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/static/parametres.html">Paramètres</a>
+              <a class="nav-link active" href="/parametres.html">Paramètres</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="cardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Card
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="cardDropdown" style="z-index: 1050;">
+                <li><a class="dropdown-item" href="/indexcardcamille.html">
+                  <i class="fas fa-cards-blank me-2"></i>Cartes
+                </a></li>
+                <li><a class="dropdown-item" href="/qcm.html">
+                  <i class="fas fa-question-circle me-2"></i>QCM
+                </a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-danger btn-sm ms-2" onclick="window.auth.logout()">
+                <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+              </button>
             </li>
           </ul>
         </div>
@@ -414,7 +483,7 @@
     <div class="container py-4">
       <!-- Page Header -->
       <div class="page-header">
-        <a href="/static/index.html" class="back-link mb-3 d-inline-block">
+        <a href="/index.html" class="back-link mb-3 d-inline-block">
           <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
         </a>
         <h1 class="page-title">Paramètres</h1>
@@ -471,8 +540,34 @@
           <p class="card-subtitle">Définissent comment les scores influencent le planning</p>
         </div>
         
-        <div id="adaptation-params-container">
-          <!-- Les paramètres seront chargés ici -->
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Révision finale (jours avant examen)</label>
+            <input type="number" id="revision_finale_jours" class="form-control" min="1" max="30" value="7">
+            <small class="form-text text-muted">Nombre de jours avant l'examen pour la révision finale obligatoire</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Distance minimale entre révisions (jours)</label>
+            <input type="number" id="min_gap_days" class="form-control" min="1" max="7" value="2">
+            <small class="form-text text-muted">Espacement minimum entre deux révisions du même cours</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Bonus pour bons scores (jours)</label>
+            <input type="number" id="bonus_ok_days" class="form-control" min="1" max="5" value="2">
+            <small class="form-text text-muted">Décalage appliqué si score > seuil_ok</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Seuil score OK (%)</label>
+            <input type="number" id="seuil_ok" class="form-control" min="50" max="100" value="85">
+            <small class="form-text text-muted">Score minimum pour considérer une révision comme réussie</small>
+          </div>
+        </div>
+        
+        <!-- Bouton de sauvegarde pour les paramètres QCM -->
+        <div class="card-footer">
+          <button type="button" id="saveQCMParams" class="btn btn-apple">
+            <i class="fas fa-save me-2"></i>Sauvegarder les paramètres QCM
+          </button>
         </div>
       </div>
 
@@ -518,7 +613,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const BASE_URL = 'http://127.0.0.1:8000';
+      const BASE_URL = 'http://127.0.0.1:8080';
 
       // Configuration des paramètres
       const globalParamsConfig = [
@@ -543,7 +638,7 @@
       // Load global parameters
       async function loadGlobalParams() {
         try {
-          const response = await fetch(`${BASE_URL}/parametres/`);
+          const response = await fetch(`${BASE_URL}/api/parametres`);
           const params = await response.json();
           
           const container = document.getElementById('global-params-container');
@@ -565,45 +660,60 @@
             `;
           }).join('');
         } catch (error) {
-          console.error('Erreur lors du chargement des paramètres globaux:', error);
-          showAlert('Erreur lors du chargement des paramètres globaux', 'danger');
+          console.error('Error lors du chargement des paramètres globaux:', error);
+          showAlert('Error lors du chargement des paramètres globaux', 'danger');
         }
       }
 
       // Load adaptation parameters
       async function loadAdaptationParams() {
         try {
-          const response = await fetch(`${BASE_URL}/parametres/`);
+          const response = await fetch(`${BASE_URL}/api/parametres`);
         const params = await response.json();
           
-          const container = document.getElementById('adaptation-params-container');
-          container.innerHTML = adaptationParamsConfig.map(config => {
-            const param = params.find(p => p.cle === config.key);
-            const value = param ? param.valeur : config.default;
-            
-            return `
-              <div class="param-row">
-                <div class="param-info">
-                  <div class="param-name">${config.label} (${config.unit})</div>
-                  <div class="param-description">${config.description}</div>
-                </div>
-                <input type="text" class="form-control param-input" value="${value}" data-key="${config.key}" />
-                <button class="btn-apple" onclick="saveParam('${config.key}', this)">
-                  <i class="fas fa-save me-1"></i>Sauvegarder
-                </button>
-              </div>
-            `;
-          }).join('');
+          // Charger les nouveaux paramètres avancés
+          const revisionFinaleParam = params.find(p => p.cle === 'revision_finale_jours');
+          const minGapParam = params.find(p => p.cle === 'min_gap_days');
+          const bonusOkParam = params.find(p => p.cle === 'bonus_ok_days');
+          const seuilOkParam = params.find(p => p.cle === 'seuil_ok');
+          
+          document.getElementById('revision_finale_jours').value = revisionFinaleParam ? revisionFinaleParam.valeur : 7;
+          document.getElementById('min_gap_days').value = minGapParam ? minGapParam.valeur : 2;
+          document.getElementById('bonus_ok_days').value = bonusOkParam ? bonusOkParam.valeur : 2;
+          document.getElementById('seuil_ok').value = seuilOkParam ? seuilOkParam.valeur : 85;
+          
+          // Ajouter les event listeners pour la sauvegarde automatique
+          ['revision_finale_jours', 'min_gap_days', 'bonus_ok_days', 'seuil_ok'].forEach(key => {
+            const input = document.getElementById(key);
+            if (input) {
+              input.addEventListener('change', async () => {
+                try {
+                  const response = await fetch(`${BASE_URL}/api/parametres/${key}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ valeur: input.value })
+                  });
+                  
+                  if (response.ok) {
+                    showAlert('Paramètre sauvegardé automatiquement', 'success');
+                  }
+                } catch (error) {
+                  console.error('Error sauvegarde:', error);
+                }
+              });
+            }
+          });
+          
         } catch (error) {
-          console.error('Erreur lors du chargement des paramètres d\'adaptation:', error);
-          showAlert('Erreur lors du chargement des paramètres d\'adaptation', 'danger');
+          console.error('Error lors du chargement des paramètres d\'adaptation:', error);
+          showAlert('Error lors du chargement des paramètres d\'adaptation', 'danger');
         }
       }
 
       // Load exams
       async function loadExamens() {
         try {
-          const response = await fetch(`${BASE_URL}/examens/`);
+          const response = await fetch(`${BASE_URL}/api/examens`);
           const examens = await response.json();
           
           examSelect.innerHTML = '<option value="">Choisissez un examen</option>';
@@ -611,15 +721,15 @@
             examSelect.innerHTML += `<option value="${examen.id}">${examen.titre} - ${new Date(examen.date_exam).toLocaleDateString('fr-FR')}</option>`;
           });
         } catch (error) {
-          console.error('Erreur lors du chargement des examens:', error);
-          showAlert('Erreur lors du chargement des examens', 'danger');
+          console.error('Error lors du chargement des examens:', error);
+          showAlert('Error lors du chargement des examens', 'danger');
         }
       }
 
       // Load exam parameters
       async function loadExamParams(examId) {
         try {
-          const response = await fetch(`${BASE_URL}/examens/${examId}`);
+          const response = await fetch(`${BASE_URL}/api/examens/${examId}`);
           const examen = await response.json();
           
           const container = document.getElementById('exam-params-container');
@@ -666,15 +776,15 @@
             </div>
           `;
         } catch (error) {
-          console.error('Erreur lors du chargement des paramètres d\'examen:', error);
-          showAlert('Erreur lors du chargement des paramètres d\'examen', 'danger');
+          console.error('Error lors du chargement des paramètres d\'examen:', error);
+          showAlert('Error lors du chargement des paramètres d\'examen', 'danger');
         }
       }
 
       // Load bareme
       async function loadBareme() {
         try {
-          const response = await fetch(`${BASE_URL}/bareme/`);
+          const response = await fetch(`${BASE_URL}/api/bareme`);
           const bareme = await response.json();
           
           const tbody = document.querySelector('#bareme-table tbody');
@@ -693,8 +803,8 @@
               </tr>
           `).join('');
         } catch (error) {
-          console.error('Erreur lors du chargement du barème:', error);
-          showAlert('Erreur lors du chargement du barème', 'danger');
+          console.error('Error lors du chargement du barème:', error);
+          showAlert('Error lors du chargement du barème', 'danger');
         }
       }
 
@@ -753,7 +863,7 @@
           
           // Essayer de charger depuis l'API
           try {
-            const response = await fetch(`${BASE_URL}/disponibilite/weekly`);
+            const response = await fetch(`${BASE_URL}/api/disponibilite/weekly`);
             if (response.ok) {
               const apiAvailability = await response.json();
               // Appliquer les valeurs de l'API
@@ -788,8 +898,8 @@
           setupAutoSaveListeners();
           
         } catch (error) {
-          console.error('Erreur lors du chargement des disponibilités:', error);
-          showAlert('Erreur lors du chargement des disponibilités', 'danger');
+          console.error('Error lors du chargement des disponibilités:', error);
+          showAlert('Error lors du chargement des disponibilités', 'danger');
         }
       }
 
@@ -802,7 +912,7 @@
         button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sauvegarde...';
         
         try {
-          const response = await fetch(`${BASE_URL}/parametres/${key}`, {
+          const response = await fetch(`${BASE_URL}/api/parametres/${key}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -814,12 +924,12 @@
             showAlert('Paramètre sauvegardé avec succès', 'success');
           } else {
             const error = await response.json();
-            showAlert(`Erreur: ${error.detail || 'Impossible de sauvegarder le paramètre'}`, 'danger');
+            showAlert(`Error: ${error.detail || 'Impossible de sauvegarder le parametre'}`, 'danger');
             input.value = input.dataset.originalValue || '';
           }
         } catch (error) {
-          console.error('Erreur:', error);
-          showAlert('Erreur lors de la sauvegarde', 'danger');
+          console.error('Error:', error);
+          showAlert('Error lors de la sauvegarde', 'danger');
           input.value = input.dataset.originalValue || '';
         } finally {
           button.disabled = false;
@@ -829,30 +939,43 @@
 
       // Save bareme item
       async function saveBaremeItem(indice, button) {
-        const input = document.querySelector(`input[data-indice="${indice}"]`);
+        const input = document.querySelector('input[data-indice="' + indice + '"]');
         const value = parseInt(input.value);
         
         button.disabled = true;
         button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sauvegarde...';
         
         try {
-          const response = await fetch(`${BASE_URL}/bareme/${indice}`, {
-          method: 'PUT',
+          // Charger le barème complet d'abord
+          const getResponse = await fetch(BASE_URL + '/api/bareme');
+          const baremeData = await getResponse.json();
+          
+          // Mettre à jour l'élément spécifique
+          const updatedBareme = baremeData.map(item => {
+            if (item.indice === indice) {
+              return { ...item, nb_revisions: value };
+            }
+            return item;
+          });
+          
+          // Sauvegarder le barème complet
+          const response = await fetch(BASE_URL + '/api/bareme', {
+            method: 'PUT',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nb_revisions: value }),
+            body: JSON.stringify(updatedBareme)
           });
 
           if (response.ok) {
-            showAlert('Barème sauvegardé avec succès', 'success');
+            showAlert('Bareme sauvegarde avec succes', 'success');
           } else {
             const error = await response.json();
-            showAlert(`Erreur: ${error.detail || 'Impossible de sauvegarder le barème'}`, 'danger');
+            showAlert('Error: ' + (error.error || 'Impossible de sauvegarder le bareme'), 'danger');
           }
         } catch (error) {
-          console.error('Erreur:', error);
-          showAlert('Erreur lors de la sauvegarde', 'danger');
+          console.error('Error:', error);
+          showAlert('Error lors de la sauvegarde', 'danger');
         } finally {
           button.disabled = false;
           button.innerHTML = '<i class="fas fa-save me-1"></i>Sauvegarder';
@@ -936,7 +1059,7 @@
           try {
             console.log(`🌐 Tentative de sauvegarde API pour ${day}: ${value}`);
             
-            const response = await fetch(`${BASE_URL}/disponibilite/weekly/${day}`, {
+            const response = await fetch(`${BASE_URL}/api/disponibilite/weekly/${day}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -964,7 +1087,7 @@
           showAutoSaveIndicator(day, 'warning');
           
         } catch (error) {
-          console.error('Erreur lors de la sauvegarde automatique:', error);
+          console.error('Error lors de la sauvegarde automatique:', error);
           showAutoSaveIndicator(day, 'error');
         }
       }
@@ -991,7 +1114,7 @@
         const statusTexts = {
           success: 'Sauvegardé',
           warning: 'Sauvegardé localement',
-          error: 'Erreur de sauvegarde'
+          error: 'Error de sauvegarde'
         };
         
         indicator.innerHTML = `${statusIcons[status]} ${statusTexts[status]}`;
@@ -1026,7 +1149,7 @@
           
           // Essayer de sauvegarder via l'API
           try {
-            const response = await fetch(`${BASE_URL}/disponibilite/weekly/${day}`, {
+            const response = await fetch(`${BASE_URL}/api/disponibilite/weekly/${day}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -1035,10 +1158,10 @@
             });
             
             if (response.ok) {
-              showAlert(`Disponibilité du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardée (${value} minutes)`, 'success');
+              showAlert(`Disponibilite du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardee (${value} minutes)`, 'success');
               return; // Succès, on sort
             } else {
-              throw new Error(`Erreur API: ${response.status}`);
+              throw new Error(`Error API: ${response.status}`);
             }
           } catch (apiError) {
             console.warn('API non disponible, sauvegarde locale:', apiError);
@@ -1049,11 +1172,11 @@
           weeklyAvailability[day] = value;
           localStorage.setItem('weeklyAvailability', JSON.stringify(weeklyAvailability));
           
-          showAlert(`Disponibilité du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardée localement (${value} minutes)`, 'warning');
+          showAlert(`Disponibilite du ${day.charAt(0).toUpperCase() + day.slice(1)} sauvegardee localement (${value} minutes)`, 'warning');
           
         } catch (error) {
-          console.error('Erreur:', error);
-          showAlert('Erreur lors de la sauvegarde', 'danger');
+          console.error('Error:', error);
+          showAlert('Error lors de la sauvegarde', 'danger');
         }
       }
 
@@ -1085,12 +1208,50 @@
         }
       });
 
+      // Fonction pour sauvegarder les paramètres QCM
+      async function saveQCMParams() {
+        try {
+          const params = {
+            'revision_finale_jours': document.getElementById('revision_finale_jours').value,
+            'min_gap_days': document.getElementById('min_gap_days').value,
+            'bonus_ok_days': document.getElementById('bonus_ok_days').value,
+            'seuil_ok': document.getElementById('seuil_ok').value
+          };
+
+          for (const key in params) {
+            const value = params[key];
+            const response = await fetch(BASE_URL + '/api/parametres/' + key, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ valeur: parseInt(value) })
+            });
+
+            if (!response.ok) {
+              throw new Error('Error lors de la sauvegarde de ' + key);
+            }
+          }
+
+          showAlert('Parametres QCM sauvegardes avec succes !', 'success');
+        } catch (error) {
+          console.error('Error lors de la sauvegarde des parametres QCM:', error);
+          showAlert('Error lors de la sauvegarde des parametres QCM', 'danger');
+        }
+      }
+
       // Initialize
       document.addEventListener('DOMContentLoaded', () => {
         loadGlobalParams();
         loadAdaptationParams();
         loadExamens();
         loadBareme();
+        
+        // Ajouter l'event listener pour le bouton de sauvegarde QCM
+        const saveQCMParamsBtn = document.getElementById('saveQCMParams');
+        if (saveQCMParamsBtn) {
+          saveQCMParamsBtn.addEventListener('click', saveQCMParams);
+        }
         
         // Créer d'abord l'interface, puis charger les données
         createWeeklyAvailabilityInterface();
@@ -1099,19 +1260,37 @@
           loadWeeklyAvailability();
         }, 200); // Augmenter le délai pour être sûr
       });
-    </script>
-    <script>
-      // Vérification de connexion
+      
+      // Vérification de connexion simple
       document.addEventListener('DOMContentLoaded', function() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loginTime = localStorage.getItem('loginTime');
         
-        if (!isLoggedIn) {
-          window.location.href = '/static/login.html';
+        if (!isLoggedIn || !loginTime) {
+          console.log('Utilisateur non connecté, redirection vers login');
+          window.location.href = '/login.html';
+          return;
+        }
+        
+        // Vérifier si la session a expiré (24h)
+        const now = new Date().getTime();
+        const loginTimestamp = new Date(loginTime).getTime();
+        const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 heures
+        
+        if (now - loginTimestamp > SESSION_DURATION) {
+          console.log('Session expirée, redirection vers login');
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('username');
+          localStorage.removeItem('loginTime');
+          window.location.href = '/login.html';
           return;
         }
         
         console.log('Page paramètres chargée - Utilisateur connecté');
       });
     </script>
+    
+    <!-- Auth JS -->
+    <script src="/auth.js"></script>
   </body>
 </html>
