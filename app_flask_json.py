@@ -896,10 +896,29 @@ def index():
     """Page d'accueil (connexion)"""
     return send_from_directory(FRONTEND_DIR, 'index.html')
 
+@app.route('/test-frontend')
+def test_frontend():
+    """Test pour vérifier l'accès aux fichiers frontend"""
+    try:
+        return jsonify({
+            "frontend_dir": str(FRONTEND_DIR),
+            "frontend_exists": FRONTEND_DIR.exists(),
+            "files": list(FRONTEND_DIR.glob("*.html")) if FRONTEND_DIR.exists() else [],
+            "cours_html_exists": (FRONTEND_DIR / "cours.html").exists() if FRONTEND_DIR.exists() else False
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/<path:filename>')
 def serve_frontend(filename):
-    """Servir les fichiers frontend"""
-    return send_from_directory(FRONTEND_DIR, filename)
+    """Servir les fichiers frontend (après les routes API et statiques)"""
+    # Vérifier que le fichier existe
+    file_path = FRONTEND_DIR / filename
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(FRONTEND_DIR, filename)
+    else:
+        # Si le fichier n'existe pas, rediriger vers index.html (pour SPA)
+        return send_from_directory(FRONTEND_DIR, 'index.html')
 
 @app.route('/static/<path:filename>')
 def serve_static(filename):
