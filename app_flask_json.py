@@ -18,7 +18,7 @@ from flask_cors import CORS
 from json_manager import json_manager
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=['https://revisioncam-1.onrender.com', 'http://localhost:8080', 'http://127.0.0.1:8080'])  # Enable CORS for all routes
 
 # Configuration
 FRONTEND_DIR = Path(__file__).parent / "frontend"
