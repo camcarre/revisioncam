@@ -568,7 +568,6 @@
           </div>
         </div>
       </div>
-      </div>
 
       <!-- Existing Scores -->
       <div class="scores-list">
@@ -820,9 +819,14 @@
           const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
           
+          const now = new Date();
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const hour = String(now.getHours()).padStart(2, '0');
+          
           const a = document.createElement('a');
           a.href = url;
-          a.download = `scores_${new Date().toISOString().split('T')[0]}.json`;
+          a.download = `JREVISION-${day}-${month}-${hour}.json`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
