@@ -834,6 +834,7 @@
           URL.revokeObjectURL(url);
           
           showAlert(`✅ ${scores.length} score(s) exporté(s) avec succès !`, 'success');
+          alert(`✅ ${scores.length} score(s) exporté(s) avec succès !`);
         } catch (error) {
           console.error('Erreur lors de l\'export des scores:', error);
           showAlert('Erreur lors de l\'export des scores', 'danger');
@@ -880,15 +881,18 @@
           
           if (imported > 0) {
             showAlert(`✅ ${imported} score(s) importé(s) avec succès !${errors > 0 ? ` (${errors} erreur(s))` : ''}`, 'success');
+            alert(`✅ ${imported} score(s) importé(s) avec succès !${errors > 0 ? ` (${errors} erreur(s))` : ''}`);
             loadScores();
             loadStatistics();
           } else {
             showAlert('Aucun score importé', 'warning');
+            alert('Aucun score importé');
           }
           
         } catch (error) {
           console.error('Erreur lors de l\'import:', error);
           showAlert('Erreur lors de l\'import du fichier', 'danger');
+          alert('Erreur lors de l\'import du fichier');
         }
         
         // Reset file input
