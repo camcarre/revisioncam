@@ -553,6 +553,21 @@
             </div>
         </div>
       </form>
+
+      <!-- Boutons Import/Export -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-success" onclick="exportScores()">
+              <i class="fas fa-download me-2"></i>Exporter les scores
+            </button>
+            <button class="btn btn-outline-primary" onclick="document.getElementById('importFile').click()">
+              <i class="fas fa-upload me-2"></i>Importer des scores
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importScores(event)">
+          </div>
+        </div>
+      </div>
       </div>
 
       <!-- Existing Scores -->
@@ -777,6 +792,102 @@
         setTimeout(() => {
           alertContainer.innerHTML = '';
         }, 5000);
+      }
+
+      // Export scores
+      async function exportScores() {
+        try {
+          console.log('📤 Export des scores...');
+          const response = await fetch(`${BASE_URL}/api/scores`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const scores = await response.json();
+          
+          if (scores.length === 0) {
+            showAlert('Aucun score à exporter', 'warning');
+            return;
+          }
+          
+          const exportData = {
+            scores: scores,
+            export_date: new Date().toISOString(),
+            version: '1.0'
+          };
+          
+          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `scores_${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          
+          showAlert(`✅ ${scores.length} score(s) exporté(s) avec succès !`, 'success');
+        } catch (error) {
+          console.error('Erreur lors de l\'export des scores:', error);
+          showAlert('Erreur lors de l\'export des scores', 'danger');
+        }
+      }
+
+      // Import scores
+      async function importScores(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        try {
+          const text = await file.text();
+          const data = JSON.parse(text);
+          
+          if (!data.scores || !Array.isArray(data.scores)) {
+            throw new Error('Format de fichier invalide');
+          }
+          
+          let imported = 0;
+          let errors = 0;
+          
+          for (const score of data.scores) {
+            try {
+              const response = await fetch(`${BASE_URL}/api/scores`, {
+          method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(score)
+              });
+              
+              if (response.ok) {
+                imported++;
+              } else {
+                errors++;
+                console.error(`Erreur import score ${score.id}:`, await response.text());
+              }
+            } catch (error) {
+              errors++;
+              console.error('Erreur import score:', error);
+            }
+          }
+          
+          if (imported > 0) {
+            showAlert(`✅ ${imported} score(s) importé(s) avec succès !${errors > 0 ? ` (${errors} erreur(s))` : ''}`, 'success');
+            loadScores();
+            loadStatistics();
+          } else {
+            showAlert('Aucun score importé', 'warning');
+          }
+          
+        } catch (error) {
+          console.error('Erreur lors de l\'import:', error);
+          showAlert('Erreur lors de l\'import du fichier', 'danger');
+        }
+        
+        // Reset file input
+        event.target.value = '';
       }
 
       // Initialize
