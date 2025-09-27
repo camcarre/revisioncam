@@ -2,21 +2,71 @@
   "examens": [
     {
       "id": 1,
-      "titre": "Examen Test",
-      "date_exam": "2025-12-25",
+      "titre": "Mathématiques - Analyse",
+      "date_exam": "2025-12-15",
+      "type": "Partiel",
+      "coefficient": 4
+    },
+    {
+      "id": 2,
+      "titre": "Physique - Mécanique",
+      "date_exam": "2025-12-18",
       "type": "Partiel",
       "coefficient": 3
+    },
+    {
+      "id": 3,
+      "titre": "Informatique - Algorithmique",
+      "date_exam": "2025-12-20",
+      "type": "Contrôle",
+      "coefficient": 2
     }
   ],
   "cours": [
     {
-      "titre": "Cours Test Modifié",
+      "id": 1,
+      "titre": "Dérivées et Intégrales",
+      "type": "Majeur",
+      "priorite_indice": 9,
+      "examen_id": 1,
+      "duree_estimee": 90,
+      "date_j0": "2025-09-25"
+    },
+    {
+      "id": 2,
+      "titre": "Limites et Continuité",
       "type": "Majeur",
       "priorite_indice": 8,
       "examen_id": 1,
+      "duree_estimee": 75,
+      "date_j0": "2025-09-28"
+    },
+    {
+      "id": 3,
+      "titre": "Cinématique",
+      "type": "Majeur",
+      "priorite_indice": 7,
+      "examen_id": 2,
       "duree_estimee": 60,
-      "date_j0": "2025-09-25",
-      "id": 1
+      "date_j0": "2025-09-30"
+    },
+    {
+      "id": 4,
+      "titre": "Dynamique",
+      "type": "Majeur",
+      "priorite_indice": 6,
+      "examen_id": 2,
+      "duree_estimee": 80,
+      "date_j0": "2025-10-02"
+    },
+    {
+      "id": 5,
+      "titre": "Structures de Données",
+      "type": "Mineur",
+      "priorite_indice": 5,
+      "examen_id": 3,
+      "duree_estimee": 45,
+      "date_j0": "2025-10-05"
     }
   ],
   "planning": [],
@@ -25,18 +75,102 @@
     {
       "cle": "duree_min",
       "valeur": 30
+    },
+    {
+      "cle": "duree_max",
+      "valeur": 180
+    },
+    {
+      "cle": "revision_finale_jours",
+      "valeur": 7
+    },
+    {
+      "cle": "min_gap_days",
+      "valeur": 1
+    },
+    {
+      "cle": "bonus_ok_days",
+      "valeur": 3
+    },
+    {
+      "cle": "seuil_ok",
+      "valeur": 70
+    },
+    {
+      "cle": "max_revisions_per_day",
+      "valeur": 3
     }
   ],
   "bareme": [
     {
       "indice": 0,
       "nb_revisions": 1
+    },
+    {
+      "indice": 1,
+      "nb_revisions": 2
+    },
+    {
+      "indice": 2,
+      "nb_revisions": 3
+    },
+    {
+      "indice": 3,
+      "nb_revisions": 4
+    },
+    {
+      "indice": 4,
+      "nb_revisions": 5
+    },
+    {
+      "indice": 5,
+      "nb_revisions": 6
+    },
+    {
+      "indice": 6,
+      "nb_revisions": 7
+    },
+    {
+      "indice": 7,
+      "nb_revisions": 8
+    },
+    {
+      "indice": 8,
+      "nb_revisions": 9
+    },
+    {
+      "indice": 9,
+      "nb_revisions": 10
     }
   ],
   "disponibilites": [
     {
       "jour": "lundi",
       "minutes": 480
+    },
+    {
+      "jour": "mardi",
+      "minutes": 480
+    },
+    {
+      "jour": "mercredi",
+      "minutes": 480
+    },
+    {
+      "jour": "jeudi",
+      "minutes": 480
+    },
+    {
+      "jour": "vendredi",
+      "minutes": 480
+    },
+    {
+      "jour": "samedi",
+      "minutes": 300
+    },
+    {
+      "jour": "dimanche",
+      "minutes": 240
     }
   ],
   "planning_logs": []
