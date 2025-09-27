@@ -909,13 +909,72 @@ def test_frontend():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/auth.js')
+def serve_auth_js():
+    """Servir spécifiquement auth.js avec le bon Content-Type"""
+    response = send_from_directory(FRONTEND_DIR, 'auth.js')
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
+
+@app.route('/app.js')
+def serve_app_js():
+    """Servir spécifiquement app.js avec le bon Content-Type"""
+    response = send_from_directory(FRONTEND_DIR, 'app.js')
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
+
+@app.route('/cours.html')
+def serve_cours():
+    """Servir la page cours"""
+    return send_from_directory(FRONTEND_DIR, 'cours.html')
+
+@app.route('/planning.html')
+def serve_planning():
+    """Servir la page planning"""
+    return send_from_directory(FRONTEND_DIR, 'planning.html')
+
+@app.route('/scores.html')
+def serve_scores():
+    """Servir la page scores"""
+    return send_from_directory(FRONTEND_DIR, 'scores.html')
+
+@app.route('/parametres.html')
+def serve_parametres():
+    """Servir la page paramètres"""
+    return send_from_directory(FRONTEND_DIR, 'parametres.html')
+
+@app.route('/login.html')
+def serve_login():
+    """Servir la page login"""
+    return send_from_directory(FRONTEND_DIR, 'login.html')
+
+@app.route('/indexcardcamille.html')
+def serve_indexcardcamille():
+    """Servir la page indexcardcamille"""
+    return send_from_directory(FRONTEND_DIR, 'indexcardcamille.html')
+
+@app.route('/qcm.html')
+def serve_qcm():
+    """Servir la page qcm"""
+    return send_from_directory(FRONTEND_DIR, 'qcm.html')
+
 @app.route('/<path:filename>')
 def serve_frontend(filename):
     """Servir les fichiers frontend (après les routes API et statiques)"""
     # Vérifier que le fichier existe
     file_path = FRONTEND_DIR / filename
     if file_path.exists() and file_path.is_file():
-        return send_from_directory(FRONTEND_DIR, filename)
+        # Définir le bon Content-Type pour les fichiers JS
+        if filename.endswith('.js'):
+            response = send_from_directory(FRONTEND_DIR, filename)
+            response.headers['Content-Type'] = 'application/javascript'
+            return response
+        elif filename.endswith('.css'):
+            response = send_from_directory(FRONTEND_DIR, filename)
+            response.headers['Content-Type'] = 'text/css'
+            return response
+        else:
+            return send_from_directory(FRONTEND_DIR, filename)
     else:
         # Si le fichier n'existe pas, rediriger vers index.html (pour SPA)
         return send_from_directory(FRONTEND_DIR, 'index.html')
