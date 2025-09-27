@@ -905,6 +905,78 @@
         loadCourses(null);
       });
 
+      // Export data
+      async function exportData() {
+        try {
+          console.log('📤 Export des données...');
+          const response = await fetch(`${BASE_URL}/api/export`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const data = await response.json();
+          
+          const now = new Date();
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const hour = String(now.getHours()).padStart(2, '0');
+          
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `JREVISION-${day}-${month}-${hour}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          
+          alert(`✅ Données exportées avec succès !`);
+        } catch (error) {
+          console.error('Erreur lors de l\'export:', error);
+          alert('Erreur lors de l\'export des données');
+        }
+      }
+
+      // Import data
+      async function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            
+            const response = await fetch(`${BASE_URL}/api/import`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+              alert('✅ Données importées avec succès !');
+              // Recharger la page pour voir les nouvelles données
+              window.location.reload();
+            } else {
+              const error = await response.json();
+              alert(`Erreur: ${error.detail || 'Impossible d\'importer les données'}`);
+            }
+          } catch (error) {
+            console.error('Erreur lors de l\'import:', error);
+            alert('Erreur lors de l\'import du fichier');
+          }
+        };
+        input.click();
+      }
+
       // Initialize
       document.addEventListener('DOMContentLoaded', async () => {
         await loadExamens();
