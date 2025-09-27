@@ -531,6 +531,60 @@
         </div>
       </div>
 
+      <!-- 2.5. Gestion des examens -->
+      <div class="settings-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-plus-circle me-2"></i>2.5. Gestion des examens
+          </h2>
+          <p class="card-subtitle">Ajouter, modifier ou supprimer des examens</p>
+        </div>
+        
+        <!-- Formulaire d'ajout d'examen -->
+        <div class="mb-4">
+          <h4 class="mb-3">Ajouter un nouvel examen</h4>
+          <form id="exam-form" class="row g-3">
+            <div class="col-md-6">
+              <label for="exam-titre" class="form-label">Titre de l'examen *</label>
+              <input type="text" id="exam-titre" class="form-control" placeholder="Ex: Mathématiques - Analyse" required>
+            </div>
+            <div class="col-md-3">
+              <label for="exam-date" class="form-label">Date de l'examen *</label>
+              <input type="date" id="exam-date" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+              <label for="exam-type" class="form-label">Type *</label>
+              <select id="exam-type" class="form-select" required>
+                <option value="">Choisir...</option>
+                <option value="Partiel">Partiel</option>
+                <option value="Contrôle">Contrôle</option>
+                <option value="QCM">QCM</option>
+                <option value="Oral">Oral</option>
+                <option value="TP">TP</option>
+                <option value="Final">Final</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <label for="exam-coeff" class="form-label">Coeff *</label>
+              <input type="number" id="exam-coeff" class="form-control" min="1" max="10" value="1" required>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Ajouter l'examen
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Liste des examens existants -->
+        <div class="mb-4">
+          <h4 class="mb-3">Examens existants</h4>
+          <div id="examens-list">
+            <!-- Les examens seront chargés ici -->
+          </div>
+        </div>
+      </div>
+
       <!-- 3. Paramètres d'adaptation (QCM) -->
       <div class="settings-card">
         <div class="card-header">
@@ -1261,6 +1315,125 @@
         }, 200); // Augmenter le délai pour être sûr
       });
       
+      // Fonctions pour la gestion des examens
+      async function loadExamens() {
+        try {
+          const response = await fetch(`${BASE_URL}/api/examens`);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          
+          const examens = await response.json();
+          displayExamens(examens);
+        } catch (error) {
+          console.error('Erreur lors du chargement des examens:', error);
+          showAlert('Erreur lors du chargement des examens', 'danger');
+        }
+      }
+
+      function displayExamens(examens) {
+        const container = document.getElementById('examens-list');
+        
+        if (examens.length === 0) {
+          container.innerHTML = `
+            <div class="text-center text-muted py-4">
+              <i class="fas fa-graduation-cap fa-2x mb-3"></i>
+              <p>Aucun examen trouvé. Ajoutez votre premier examen ci-dessus.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = examens.map(examen => `
+          <div class="exam-card mb-3 p-3 border rounded">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="mb-1">${examen.titre}</h5>
+                <p class="mb-1 text-muted">
+                  <i class="fas fa-calendar me-1"></i>${new Date(examen.date_exam).toLocaleDateString('fr-FR')}
+                  <span class="ms-3"><i class="fas fa-tag me-1"></i>${examen.type}</span>
+                  <span class="ms-3"><i class="fas fa-weight-hanging me-1"></i>Coeff: ${examen.coefficient}</span>
+                </p>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteExamen(${examen.id})">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      async function addExamen(examenData) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/examens`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(examenData)
+          });
+          
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Erreur lors de l\'ajout');
+          }
+          
+          const newExamen = await response.json();
+          showAlert(`✅ Examen "${newExamen.titre}" ajouté avec succès !`, 'success');
+          loadExamens();
+          loadExamensForSelect();
+          
+          // Réinitialiser le formulaire
+          document.getElementById('exam-form').reset();
+          
+        } catch (error) {
+          console.error('Erreur lors de l\'ajout de l\'examen:', error);
+          showAlert(`Erreur: ${error.message}`, 'danger');
+        }
+      }
+
+      async function deleteExamen(examenId) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cet examen ? Cette action est irréversible.')) {
+          return;
+        }
+        
+        try {
+          const response = await fetch(`${BASE_URL}/api/examens/${examenId}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Erreur lors de la suppression');
+          }
+          
+          showAlert('✅ Examen supprimé avec succès !', 'success');
+          loadExamens();
+          loadExamensForSelect();
+          
+        } catch (error) {
+          console.error('Erreur lors de la suppression:', error);
+          showAlert(`Erreur: ${error.message}`, 'danger');
+        }
+      }
+
+      // Gestion du formulaire d'ajout d'examen
+      document.getElementById('exam-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+          titre: document.getElementById('exam-titre').value.trim(),
+          date_exam: document.getElementById('exam-date').value,
+          type: document.getElementById('exam-type').value,
+          coefficient: parseInt(document.getElementById('exam-coeff').value)
+        };
+        
+        if (!formData.titre || !formData.date_exam || !formData.type) {
+          showAlert('Veuillez remplir tous les champs obligatoires', 'warning');
+          return;
+        }
+        
+        await addExamen(formData);
+      });
+
       // Vérification de connexion simple
       document.addEventListener('DOMContentLoaded', function() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
