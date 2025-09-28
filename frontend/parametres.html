@@ -1379,7 +1379,6 @@
           const newExamen = await response.json();
           showAlert(`✅ Examen "${newExamen.titre}" ajouté avec succès !`, 'success');
           loadExamens();
-          loadExamensForSelect();
           
           // Réinitialiser le formulaire
           document.getElementById('exam-form').reset();
@@ -1407,7 +1406,6 @@
           
           showAlert('✅ Examen supprimé avec succès !', 'success');
           loadExamens();
-          loadExamensForSelect();
           
         } catch (error) {
           console.error('Erreur lors de la suppression:', error);
