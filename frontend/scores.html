@@ -521,17 +521,7 @@
             <div class="col-md-6">
               <label for="jalon" class="form-label">Jalon</label>
               <select id="jalon" name="jalon" class="form-select" required>
-                <option value="">Sélectionnez un jalon</option>
-                <option value="J1">J1 - Première révision</option>
-                <option value="J3">J3 - Révision à 3 jours</option>
-                <option value="J7">J7 - Révision à 1 semaine</option>
-                <option value="J14">J14 - Révision à 2 semaines</option>
-                <option value="J21">J21 - Révision à 3 semaines</option>
-                <option value="J30">J30 - Révision à 1 mois</option>
-                <option value="J45">J45 - Révision à 45 jours</option>
-                <option value="J60">J60 - Révision à 2 mois</option>
-                <option value="J75">J75 - Révision à 75 jours</option>
-                <option value="J90">J90 - Révision à 3 mois</option>
+                <option value="">Sélectionnez d'abord un cours</option>
               </select>
         </div>
         <div class="col-md-4">
@@ -611,7 +601,7 @@
                 const courses = await coursesResponse.json();
                 if (Array.isArray(courses)) {
                   courses.forEach(course => {
-                    courseSelect.innerHTML += `<option value="${course.id}">${course.titre} (${examen.titre})</option>`;
+                    courseSelect.innerHTML += `<option value="${course.id}" data-priorite="${course.priorite_indice}">${course.titre} (${examen.titre})</option>`;
                   });
                 }
               } else {
@@ -624,6 +614,58 @@
         } catch (error) {
           console.error('Erreur lors du chargement des cours:', error);
           showAlert('Erreur lors du chargement des cours', 'danger');
+        }
+      }
+
+      // Load available jalons for a specific course
+      async function loadJalonsForCourse(courseId) {
+        try {
+          const jalonSelect = document.getElementById('jalon');
+          jalonSelect.innerHTML = '<option value="">Chargement des jalons...</option>';
+          
+          // Get course details to determine number of revisions
+          const courseResponse = await fetch(`${BASE_URL}/api/cours/${courseId}`);
+          if (!courseResponse.ok) {
+            throw new Error('Cours non trouvé');
+          }
+          const course = await courseResponse.json();
+          
+          // Get existing scores for this course
+          const scoresResponse = await fetch(`${BASE_URL}/api/scores?cours_id=${courseId}`);
+          const existingScores = scoresResponse.ok ? await scoresResponse.json() : [];
+          
+          // Calculate number of revisions based on priorite_indice
+          const prioriteIndice = course.priorite_indice || 5;
+          const nbRevisions = Math.min(prioriteIndice + 1, 10); // Max 10 révisions
+          
+          // Get planning items for this course to see which jalons exist
+          const planningResponse = await fetch(`${BASE_URL}/api/planning/course/${courseId}`);
+          const planningItems = planningResponse.ok ? await planningResponse.json() : [];
+          
+          // Build jalon options
+          jalonSelect.innerHTML = '<option value="">Sélectionnez un jalon</option>';
+          
+          for (let i = 1; i <= nbRevisions; i++) {
+            // Check if this jalon already has a score
+            const hasScore = existingScores.some(score => score.jalon === i);
+            
+            if (!hasScore) {
+              // Get the planning item for this jalon
+              const planningItem = planningItems.find(item => item.jalon === i);
+              const dateInfo = planningItem ? ` (${new Date(planningItem.date_finale).toLocaleDateString('fr-FR')})` : '';
+              
+              jalonSelect.innerHTML += `<option value="${i}">Jalon ${i}${dateInfo}</option>`;
+            }
+          }
+          
+          if (jalonSelect.children.length === 1) {
+            jalonSelect.innerHTML = '<option value="">Aucun jalon disponible</option>';
+          }
+          
+        } catch (error) {
+          console.error('Erreur lors du chargement des jalons:', error);
+          const jalonSelect = document.getElementById('jalon');
+          jalonSelect.innerHTML = '<option value="">Erreur de chargement</option>';
         }
       }
 
@@ -907,6 +949,17 @@
         
         // Set today's date as default
         document.getElementById('date_eval').value = new Date().toISOString().split('T')[0];
+        
+        // Add event listener for course selection
+        document.getElementById('courseSelect').addEventListener('change', function() {
+          const courseId = this.value;
+          if (courseId) {
+            loadJalonsForCourse(courseId);
+          } else {
+            const jalonSelect = document.getElementById('jalon');
+            jalonSelect.innerHTML = '<option value="">Sélectionnez d\'abord un cours</option>';
+          }
+        });
       });
     </script>
     <script>

@@ -652,6 +652,13 @@ def get_planning_for_exam(exam_id):
     planning = json_manager.get_planning(exam_id)
     return jsonify(planning)
 
+@app.route('/api/planning/course/<int:course_id>', methods=['GET'])
+def get_planning_for_course(course_id):
+    """Récupérer le planning pour un cours spécifique"""
+    planning = json_manager.get_planning()
+    course_planning = [item for item in planning if item.get('cours_id') == course_id]
+    return jsonify(course_planning)
+
 @app.route('/api/planning/<int:planning_id>', methods=['PUT'])
 def update_planning_item(planning_id):
     """Mettre à jour un élément de planning"""
