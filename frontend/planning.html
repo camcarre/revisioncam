@@ -813,6 +813,44 @@
         return 'low-priority';
       }
 
+      // Créer un score par défaut quand on marque une révision comme "Fait"
+      async function createDefaultScoreForPlanningItem(item) {
+        try {
+          // Vérifier si un score existe déjà pour ce jalon
+          const scoresResponse = await fetch(`${BASE_URL}/api/scores?cours_id=${item.cours_id}`);
+          const existingScores = scoresResponse.ok ? await scoresResponse.json() : [];
+          
+          const hasExistingScore = existingScores.some(score => score.jalon === item.jalon);
+          
+          if (!hasExistingScore) {
+            // Créer un score par défaut (score moyen pour éviter les ajustements automatiques)
+            const defaultScore = {
+              cours_id: item.cours_id,
+              jalon: item.jalon,
+              score: 75, // Score moyen (75/100)
+              total: 100,
+              date_eval: new Date().toISOString().split('T')[0]
+            };
+            
+            const response = await fetch(`${BASE_URL}/api/scores`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(defaultScore),
+            });
+            
+            if (response.ok) {
+              console.log(`📊 Score par défaut créé pour le cours ${item.cours_id}, jalon ${item.jalon}`);
+            } else {
+              console.warn(`⚠️ Impossible de créer le score par défaut pour le cours ${item.cours_id}, jalon ${item.jalon}`);
+            }
+          }
+        } catch (error) {
+          console.error('Erreur lors de la création du score par défaut:', error);
+        }
+      }
+
       // Toggle planning item status avec menu contextuel
       async function togglePlanningItemStatus(itemId, currentStatus) {
         const item = planningData.find(i => i.id === itemId);
@@ -859,6 +897,11 @@
             // Update local data
             item.statut = newStatus;
             item.date_finale = newDate;
+            
+            // Synchronisation bidirectionnelle
+            if (newStatus === 'Fait') {
+              await createDefaultScoreForPlanningItem(item);
+            }
             
             renderCalendar();
             

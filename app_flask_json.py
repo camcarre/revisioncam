@@ -486,6 +486,29 @@ def adjust_planning_after_high_score(course_id: int, jalon: int, params: Plannin
         json_manager.update_planning_item(item['id'], item)
         print(f"📅 Révision {item['jalon']} décalée du {current_date.strftime('%Y-%m-%d')} au {new_date.strftime('%Y-%m-%d')}")
 
+def mark_planning_item_as_done(course_id: int, jalon: int):
+    """Marque un élément de planning comme 'Fait' quand un score est ajouté"""
+    planning_items = json_manager.get_planning()
+    
+    # Trouver l'élément de planning correspondant
+    planning_item = None
+    for item in planning_items:
+        if item.get('cours_id') == course_id and item.get('jalon') == jalon:
+            planning_item = item
+            break
+    
+    if planning_item and planning_item.get('statut') != 'Fait':
+        # Marquer comme "Fait" avec la date d'aujourd'hui
+        planning_item['statut'] = 'Fait'
+        planning_item['date_finale'] = datetime.now().strftime('%Y-%m-%d')
+        
+        json_manager.update_planning_item(planning_item['id'], planning_item)
+        print(f"✅ Révision marquée comme 'Fait' pour cours {course_id}, jalon {jalon}")
+    elif planning_item:
+        print(f"ℹ️ Révision déjà marquée comme 'Fait' pour cours {course_id}, jalon {jalon}")
+    else:
+        print(f"⚠️ Aucun élément de planning trouvé pour cours {course_id}, jalon {jalon}")
+
 # === ENDPOINTS API ===
 
 @app.route('/api/health', methods=['GET'])
@@ -779,8 +802,11 @@ def create_score():
     
     score_result = json_manager.create_score(data)
     
-    # Ajuster le planning selon le score (seulement si jalon est numérique)
+    # Marquer automatiquement la révision comme "Fait" dans le planning
     if isinstance(jalon, int):
+        mark_planning_item_as_done(cours_id, jalon)
+        
+        # Ajuster le planning selon le score
         date_eval = data.get('date_eval')
         adjust_planning_with_score(cours_id, jalon, score, total, date_eval)
     
