@@ -1,0 +1,98 @@
+{
+  "examens": [
+    {
+      "id": 1,
+      "titre": "Anatomie Générale",
+      "date_exam": "2025-01-15",
+      "type": "Partiel"
+    },
+    {
+      "id": 2,
+      "titre": "Physiologie Cardiaque",
+      "date_exam": "2025-02-20",
+      "type": "Contrôle"
+    },
+    {
+      "id": 3,
+      "titre": "Pharmacologie",
+      "date_exam": "2025-03-10",
+      "type": "QCM"
+    },
+    {
+      "id": 4,
+      "titre": "Pathologie Respiratoire",
+      "date_exam": "2025-04-05",
+      "type": "Oral"
+    },
+    {
+      "id": 5,
+      "titre": "Chirurgie Cardiaque",
+      "date_exam": "2025-05-12",
+      "type": "Final"
+    },
+    {
+      "id": 6,
+      "titre": "Neurologie",
+      "date_exam": "2025-06-08",
+      "type": "Partiel"
+    },
+    {
+      "id": 7,
+      "titre": "Dermatologie",
+      "date_exam": "2025-07-15",
+      "type": "Contrôle"
+    },
+    {
+      "id": 8,
+      "titre": "Ophtalmologie",
+      "date_exam": "2025-08-22",
+      "type": "QCM"
+    },
+    {
+      "id": 9,
+      "titre": "Orthopédie",
+      "date_exam": "2025-09-10",
+      "type": "Oral"
+    },
+    {
+      "id": 10,
+      "titre": "Gynécologie",
+      "date_exam": "2025-10-18",
+      "type": "Final"
+    }
+  ],
+  "cours": [],
+  "planning": [],
+  "scores": [],
+  "parametres": [
+    { "cle": "duree_min", "valeur": 30 },
+    { "cle": "duree_max", "valeur": 180 },
+    { "cle": "revision_finale_jours", "valeur": 7 },
+    { "cle": "min_gap_days", "valeur": 1 },
+    { "cle": "bonus_ok_days", "valeur": 3 },
+    { "cle": "seuil_ok", "valeur": 70 },
+    { "cle": "max_revisions_per_day", "valeur": 3 }
+  ],
+  "bareme": [
+    { "indice": 0, "nb_revisions": 1 },
+    { "indice": 1, "nb_revisions": 2 },
+    { "indice": 2, "nb_revisions": 3 },
+    { "indice": 3, "nb_revisions": 4 },
+    { "indice": 4, "nb_revisions": 5 },
+    { "indice": 5, "nb_revisions": 6 },
+    { "indice": 6, "nb_revisions": 7 },
+    { "indice": 7, "nb_revisions": 8 },
+    { "indice": 8, "nb_revisions": 9 },
+    { "indice": 9, "nb_revisions": 10 }
+  ],
+  "disponibilites": [
+    { "jour": "lundi", "minutes": 480 },
+    { "jour": "mardi", "minutes": 480 },
+    { "jour": "mercredi", "minutes": 480 },
+    { "jour": "jeudi", "minutes": 480 },
+    { "jour": "vendredi", "minutes": 480 },
+    { "jour": "samedi", "minutes": 240 },
+    { "jour": "dimanche", "minutes": 240 }
+  ],
+  "planning_logs": []
+}

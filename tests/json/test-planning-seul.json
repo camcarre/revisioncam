@@ -1,0 +1,343 @@
+{
+  "examens": [
+    {
+      "id": 1,
+      "titre": "Test Planning - Examen 1",
+      "date_exam": "2025-01-15",
+      "type": "Partiel"
+    },
+    {
+      "id": 2,
+      "titre": "Test Planning - Examen 2",
+      "date_exam": "2025-02-20",
+      "type": "Contrôle"
+    }
+  ],
+  "cours": [
+    {
+      "id": 1,
+      "titre": "Cours Test Planning 1",
+      "examen_id": 1,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2024-12-01"
+    },
+    {
+      "id": 2,
+      "titre": "Cours Test Planning 2",
+      "examen_id": 1,
+      "priorite_indice": 5,
+      "duree_estimee": 60,
+      "type": "Mineur",
+      "date_j0": "2024-12-05"
+    },
+    {
+      "id": 3,
+      "titre": "Cours Test Planning 3",
+      "examen_id": 2,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2024-12-15"
+    }
+  ],
+  "planning": [
+    {
+      "id": 1,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 1,
+      "date_finale": "2024-12-02",
+      "duree": 54,
+      "statut": "Fait",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 2,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 2,
+      "date_finale": "2024-12-05",
+      "duree": 45,
+      "statut": "Fait",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 3,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 3,
+      "date_finale": "2024-12-09",
+      "duree": 36,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 4,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 4,
+      "date_finale": "2024-12-16",
+      "duree": 32,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 5,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 5,
+      "date_finale": "2024-12-23",
+      "duree": 27,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 6,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 6,
+      "date_finale": "2025-01-01",
+      "duree": 23,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 7,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 7,
+      "date_finale": "2025-01-16",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 8,
+      "cours_id": 1,
+      "examen_id": 1,
+      "jalon": 8,
+      "date_finale": "2025-01-08",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 8
+    },
+    {
+      "id": 9,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 1,
+      "date_finale": "2024-12-06",
+      "duree": 36,
+      "statut": "Fait",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 10,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 2,
+      "date_finale": "2024-12-09",
+      "duree": 30,
+      "statut": "Reporté",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 11,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 3,
+      "date_finale": "2024-12-16",
+      "duree": 24,
+      "statut": "À faire",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 12,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 4,
+      "date_finale": "2024-12-23",
+      "duree": 21,
+      "statut": "À faire",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 13,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 5,
+      "date_finale": "2025-01-01",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 14,
+      "cours_id": 2,
+      "examen_id": 1,
+      "jalon": 6,
+      "date_finale": "2025-01-16",
+      "duree": 15,
+      "statut": "À faire",
+      "type": "Mineur",
+      "priorite_indice": 5
+    },
+    {
+      "id": 15,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 1,
+      "date_finale": "2024-12-16",
+      "duree": 72,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 16,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 2,
+      "date_finale": "2024-12-19",
+      "duree": 60,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 17,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 3,
+      "date_finale": "2024-12-25",
+      "duree": 48,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 18,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 4,
+      "date_finale": "2025-01-01",
+      "duree": 42,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 19,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 5,
+      "date_finale": "2025-01-08",
+      "duree": 36,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 20,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 6,
+      "date_finale": "2025-01-23",
+      "duree": 30,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 21,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 7,
+      "date_finale": "2025-02-07",
+      "duree": 24,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 22,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 8,
+      "date_finale": "2025-02-13",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 23,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 9,
+      "date_finale": "2025-02-13",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    },
+    {
+      "id": 24,
+      "cours_id": 3,
+      "examen_id": 2,
+      "jalon": 10,
+      "date_finale": "2025-02-13",
+      "duree": 18,
+      "statut": "À faire",
+      "type": "Majeur",
+      "priorite_indice": 9
+    }
+  ],
+  "scores": [],
+  "parametres": [
+    { "cle": "duree_min", "valeur": 30 },
+    { "cle": "duree_max", "valeur": 180 },
+    { "cle": "revision_finale_jours", "valeur": 7 },
+    { "cle": "min_gap_days", "valeur": 1 },
+    { "cle": "bonus_ok_days", "valeur": 3 },
+    { "cle": "seuil_ok", "valeur": 70 },
+    { "cle": "max_revisions_per_day", "valeur": 3 }
+  ],
+  "bareme": [
+    { "indice": 0, "nb_revisions": 1 },
+    { "indice": 1, "nb_revisions": 2 },
+    { "indice": 2, "nb_revisions": 3 },
+    { "indice": 3, "nb_revisions": 4 },
+    { "indice": 4, "nb_revisions": 5 },
+    { "indice": 5, "nb_revisions": 6 },
+    { "indice": 6, "nb_revisions": 7 },
+    { "indice": 7, "nb_revisions": 8 },
+    { "indice": 8, "nb_revisions": 9 },
+    { "indice": 9, "nb_revisions": 10 }
+  ],
+  "disponibilites": [
+    { "jour": "lundi", "minutes": 480 },
+    { "jour": "mardi", "minutes": 480 },
+    { "jour": "mercredi", "minutes": 480 },
+    { "jour": "jeudi", "minutes": 480 },
+    { "jour": "vendredi", "minutes": 480 },
+    { "jour": "samedi", "minutes": 240 },
+    { "jour": "dimanche", "minutes": 240 }
+  ],
+  "planning_logs": []
+}

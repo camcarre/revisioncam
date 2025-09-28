@@ -1,0 +1,294 @@
+{
+  "examens": [
+    {
+      "id": 1,
+      "titre": "Anatomie Générale - Test Cours",
+      "date_exam": "2025-01-15",
+      "type": "Partiel"
+    },
+    {
+      "id": 2,
+      "titre": "Physiologie - Test Cours",
+      "date_exam": "2025-02-20",
+      "type": "Contrôle"
+    },
+    {
+      "id": 3,
+      "titre": "Pharmacologie - Test Cours",
+      "date_exam": "2025-03-10",
+      "type": "QCM"
+    },
+    {
+      "id": 4,
+      "titre": "Pathologie - Test Cours",
+      "date_exam": "2025-04-05",
+      "type": "Oral"
+    },
+    {
+      "id": 5,
+      "titre": "Chirurgie - Test Cours",
+      "date_exam": "2025-05-12",
+      "type": "Final"
+    }
+  ],
+  "cours": [
+    {
+      "id": 1,
+      "titre": "Anatomie du système cardiovasculaire",
+      "examen_id": 1,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2024-12-01"
+    },
+    {
+      "id": 2,
+      "titre": "Anatomie du coeur et des vaisseaux",
+      "examen_id": 1,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2024-12-05"
+    },
+    {
+      "id": 3,
+      "titre": "Circulation pulmonaire et systémique",
+      "examen_id": 1,
+      "priorite_indice": 7,
+      "duree_estimee": 75,
+      "type": "Majeur",
+      "date_j0": "2024-12-10"
+    },
+    {
+      "id": 4,
+      "titre": "Anatomie des valves cardiaques",
+      "examen_id": 1,
+      "priorite_indice": 6,
+      "duree_estimee": 60,
+      "type": "Majeur",
+      "date_j0": "2024-12-15"
+    },
+    {
+      "id": 5,
+      "titre": "Innervation du coeur",
+      "examen_id": 1,
+      "priorite_indice": 5,
+      "duree_estimee": 45,
+      "type": "Mineur",
+      "date_j0": "2024-12-20"
+    },
+    {
+      "id": 6,
+      "titre": "Physiologie de la contraction cardiaque",
+      "examen_id": 2,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2024-12-25"
+    },
+    {
+      "id": 7,
+      "titre": "Cycle cardiaque et phases",
+      "examen_id": 2,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2024-12-30"
+    },
+    {
+      "id": 8,
+      "titre": "Débit cardiaque et régulation",
+      "examen_id": 2,
+      "priorite_indice": 7,
+      "duree_estimee": 75,
+      "type": "Majeur",
+      "date_j0": "2025-01-05"
+    },
+    {
+      "id": 9,
+      "titre": "Électrophysiologie cardiaque",
+      "examen_id": 2,
+      "priorite_indice": 6,
+      "duree_estimee": 60,
+      "type": "Majeur",
+      "date_j0": "2025-01-10"
+    },
+    {
+      "id": 10,
+      "titre": "Conduction électrique",
+      "examen_id": 2,
+      "priorite_indice": 5,
+      "duree_estimee": 45,
+      "type": "Mineur",
+      "date_j0": "2025-01-15"
+    },
+    {
+      "id": 11,
+      "titre": "Pharmacologie des médicaments cardiaques",
+      "examen_id": 3,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2025-01-20"
+    },
+    {
+      "id": 12,
+      "titre": "Anti-arythmiques",
+      "examen_id": 3,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2025-01-25"
+    },
+    {
+      "id": 13,
+      "titre": "Diurétiques",
+      "examen_id": 3,
+      "priorite_indice": 7,
+      "duree_estimee": 75,
+      "type": "Majeur",
+      "date_j0": "2025-01-30"
+    },
+    {
+      "id": 14,
+      "titre": "Vasodilatateurs",
+      "examen_id": 3,
+      "priorite_indice": 6,
+      "duree_estimee": 60,
+      "type": "Majeur",
+      "date_j0": "2025-02-05"
+    },
+    {
+      "id": 15,
+      "titre": "Interactions médicamenteuses",
+      "examen_id": 3,
+      "priorite_indice": 4,
+      "duree_estimee": 50,
+      "type": "Mineur",
+      "date_j0": "2025-02-10"
+    },
+    {
+      "id": 16,
+      "titre": "Pathologie cardiaque ischémique",
+      "examen_id": 4,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2025-02-15"
+    },
+    {
+      "id": 17,
+      "titre": "Infarctus du myocarde",
+      "examen_id": 4,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2025-02-20"
+    },
+    {
+      "id": 18,
+      "titre": "Angine de poitrine",
+      "examen_id": 4,
+      "priorite_indice": 7,
+      "duree_estimee": 75,
+      "type": "Majeur",
+      "date_j0": "2025-02-25"
+    },
+    {
+      "id": 19,
+      "titre": "Insuffisance cardiaque",
+      "examen_id": 4,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2025-03-01"
+    },
+    {
+      "id": 20,
+      "titre": "Arythmies cardiaques",
+      "examen_id": 4,
+      "priorite_indice": 6,
+      "duree_estimee": 60,
+      "type": "Majeur",
+      "date_j0": "2025-03-05"
+    },
+    {
+      "id": 21,
+      "titre": "Chirurgie cardiaque ouverte",
+      "examen_id": 5,
+      "priorite_indice": 9,
+      "duree_estimee": 120,
+      "type": "Majeur",
+      "date_j0": "2025-03-10"
+    },
+    {
+      "id": 22,
+      "titre": "Chirurgie mini-invasive",
+      "examen_id": 5,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2025-03-15"
+    },
+    {
+      "id": 23,
+      "titre": "Pose de pacemaker",
+      "examen_id": 5,
+      "priorite_indice": 7,
+      "duree_estimee": 75,
+      "type": "Majeur",
+      "date_j0": "2025-03-20"
+    },
+    {
+      "id": 24,
+      "titre": "Angioplastie coronaire",
+      "examen_id": 5,
+      "priorite_indice": 8,
+      "duree_estimee": 90,
+      "type": "Majeur",
+      "date_j0": "2025-03-25"
+    },
+    {
+      "id": 25,
+      "titre": "Complications post-opératoires",
+      "examen_id": 5,
+      "priorite_indice": 5,
+      "duree_estimee": 45,
+      "type": "Mineur",
+      "date_j0": "2025-03-30"
+    }
+  ],
+  "planning": [],
+  "scores": [],
+  "parametres": [
+    { "cle": "duree_min", "valeur": 30 },
+    { "cle": "duree_max", "valeur": 180 },
+    { "cle": "revision_finale_jours", "valeur": 7 },
+    { "cle": "min_gap_days", "valeur": 1 },
+    { "cle": "bonus_ok_days", "valeur": 3 },
+    { "cle": "seuil_ok", "valeur": 70 },
+    { "cle": "max_revisions_per_day", "valeur": 3 }
+  ],
+  "bareme": [
+    { "indice": 0, "nb_revisions": 1 },
+    { "indice": 1, "nb_revisions": 2 },
+    { "indice": 2, "nb_revisions": 3 },
+    { "indice": 3, "nb_revisions": 4 },
+    { "indice": 4, "nb_revisions": 5 },
+    { "indice": 5, "nb_revisions": 6 },
+    { "indice": 6, "nb_revisions": 7 },
+    { "indice": 7, "nb_revisions": 8 },
+    { "indice": 8, "nb_revisions": 9 },
+    { "indice": 9, "nb_revisions": 10 }
+  ],
+  "disponibilites": [
+    { "jour": "lundi", "minutes": 480 },
+    { "jour": "mardi", "minutes": 480 },
+    { "jour": "mercredi", "minutes": 480 },
+    { "jour": "jeudi", "minutes": 480 },
+    { "jour": "vendredi", "minutes": 480 },
+    { "jour": "samedi", "minutes": 240 },
+    { "jour": "dimanche", "minutes": 240 }
+  ],
+  "planning_logs": []
+}
