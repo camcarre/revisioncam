@@ -181,7 +181,14 @@ def regenerate_planning_for_exam(exam_id: int):
 
 def detect_conflicts(params: PlanningParams) -> List[Dict]:
     """Détecte les conflits de planning"""
-    print(f"🔍 Détection des conflits avec les seuils: nb_max={params.nb_max_par_j}, duree_max={params.default_daily_minutes}")
+    # Récupérer max_revisions_per_day depuis les paramètres
+    parametres = json_manager.get_parametres()
+    max_revisions_per_day = parametres.get('max_revisions_per_day', 3)
+    
+    # Récupérer les disponibilités hebdomadaires
+    availability_map = get_availability_map()
+    
+    print(f"🔍 Détection des conflits avec les seuils: nb_max={params.nb_max_par_j}, duree_max={params.default_daily_minutes}, max_revisions_per_day={max_revisions_per_day}")
     
     planning = json_manager.get_planning()
     print(f"📋 Éléments de planning à analyser: {len(planning)}")
@@ -200,10 +207,21 @@ def detect_conflicts(params: PlanningParams) -> List[Dict]:
     
     print(f"📊 Statistiques quotidiennes calculées pour {len(daily_stats)} dates")
     
+    # Mapping des jours de la semaine
+    days_of_week = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    
     # Identifier les conflits
     for date_key, stats in daily_stats.items():
-        if stats['count'] > params.nb_max_par_j or stats['duration'] > params.default_daily_minutes:
-            print(f"⚠️ Conflit détecté le {date_key}: {stats['count']} révisions ({stats['duration']} min)")
+        # Calculer la disponibilité pour ce jour de la semaine
+        date_obj = datetime.strptime(date_key, '%Y-%m-%d').date()
+        day_of_week = days_of_week[date_obj.weekday()]
+        day_availability = availability_map.get(day_of_week, params.default_daily_minutes)
+        
+        # Utiliser max_revisions_per_day et la disponibilité du jour
+        max_daily_minutes = min(day_availability, params.default_daily_minutes)
+        
+        if stats['count'] > max_revisions_per_day or stats['duration'] > max_daily_minutes:
+            print(f"⚠️ Conflit détecté le {date_key} ({day_of_week}): {stats['count']} révisions ({stats['duration']} min) - Disponibilité: {day_availability} min")
             conflicts.append({
                 'date_finale': date_key,
                 'nb_revisions': stats['count'],
@@ -353,7 +371,22 @@ def find_slot(item: Dict, params: PlanningParams) -> Optional[str]:
     exam_date = datetime.strptime(exam['date_exam'], '%Y-%m-%d').date()
     candidate = datetime.strptime(item.get('date_finale', '2025-01-01'), '%Y-%m-%d').date()
     
+    # Récupérer les disponibilités hebdomadaires
+    availability_map = get_availability_map()
+    
+    # Mapping des jours de la semaine
+    days_of_week = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    
     while candidate < exam_date:
+        # Vérifier si le jour de la semaine est disponible
+        day_of_week = days_of_week[candidate.weekday()]
+        day_availability = availability_map.get(day_of_week, 0)
+        
+        if day_availability <= 0:
+            # Jour non disponible, passer au suivant
+            candidate += timedelta(days=1)
+            continue
+        
         # Vérifier la disponibilité pour cette date
         daily_planning = [p for p in json_manager.get_planning()
                          if p.get('date_finale') == candidate.strftime('%Y-%m-%d') and p.get('statut') != 'Fait']
@@ -361,24 +394,50 @@ def find_slot(item: Dict, params: PlanningParams) -> Optional[str]:
         total_duration = sum(p.get('duree', 0) for p in daily_planning)
         count = len(daily_planning)
         
-        if count < params.nb_max_par_j and total_duration + item.get('duree', 0) <= params.default_daily_minutes:
+        # Vérifier le respect du délai minimum entre révisions du même cours
+        cours_id = item.get('cours_id')
+        min_gap_ok = True
+        if cours_id and params.min_gap_days > 0:
+            # Chercher la dernière révision de ce cours
+            cours_planning = [p for p in json_manager.get_planning()
+                             if p.get('cours_id') == cours_id and p.get('statut') != 'Fait' and p.get('id') != item.get('id')]
+            if cours_planning:
+                # Trier par date pour trouver la plus récente
+                cours_planning.sort(key=lambda x: datetime.strptime(x.get('date_finale', '2025-01-01'), '%Y-%m-%d'))
+                last_revision_date = datetime.strptime(cours_planning[-1].get('date_finale', '2025-01-01'), '%Y-%m-%d').date()
+                days_gap = (candidate - last_revision_date).days
+                if days_gap < params.min_gap_days:
+                    min_gap_ok = False
+        
+        # Récupérer max_revisions_per_day depuis les paramètres
+        parametres = json_manager.get_parametres()
+        max_revisions_per_day = parametres.get('max_revisions_per_day', 3)
+        
+        # Utiliser la disponibilité du jour ou la limite par défaut
+        max_daily_minutes = min(day_availability, params.default_daily_minutes)
+        
+        if count < max_revisions_per_day and total_duration + item.get('duree', 0) <= max_daily_minutes and min_gap_ok:
             return candidate.strftime('%Y-%m-%d')
         
         candidate += timedelta(days=1)
     
     return None
 
-def adjust_planning_with_score(course_id: int, jalon: int, score: int, total: int):
+def adjust_planning_with_score(course_id: int, jalon: int, score: int, total: int, date_eval: str = None):
     """Ajuste le planning selon un score QCM"""
     ratio = score / total
     params = load_params()
     
+    print(f"📊 Ajustement planning pour cours {course_id}, jalon {jalon}, score {score}/{total} (ratio: {ratio:.2f})")
+    if date_eval:
+        print(f"📅 Date d'évaluation: {date_eval}")
+    
     if ratio < 0.6:  # Score faible
-        add_extra_revision_after_score(course_id, jalon, score, total)
+        add_extra_revision_after_score(course_id, jalon, score, total, date_eval)
     elif ratio >= 0.85:  # Score excellent
-        adjust_planning_after_high_score(course_id, jalon, params)
+        adjust_planning_after_high_score(course_id, jalon, params, date_eval)
 
-def add_extra_revision_after_score(course_id: int, jalon: int, score: int, total: int):
+def add_extra_revision_after_score(course_id: int, jalon: int, score: int, total: int, date_eval: str = None):
     """Ajoute une révision supplémentaire après un score faible"""
     course = json_manager.get_cours_by_id(course_id)
     if not course:
@@ -388,8 +447,15 @@ def add_extra_revision_after_score(course_id: int, jalon: int, score: int, total
     if not exam:
         return
     
-    # Date de la révision supplémentaire : 2 jours après le jalon évalué
-    jalon_date = datetime.now().date() + timedelta(days=2)
+    # Utiliser la date d'évaluation si fournie, sinon utiliser la date actuelle
+    if date_eval:
+        eval_date = datetime.strptime(date_eval, '%Y-%m-%d').date()
+        jalon_date = eval_date + timedelta(days=2)  # 2 jours après l'évaluation
+    else:
+        # Date de la révision supplémentaire : 2 jours après aujourd'hui
+        jalon_date = datetime.now().date() + timedelta(days=2)
+    
+    print(f"📅 Révision supplémentaire prévue le {jalon_date.strftime('%Y-%m-%d')}")
     
     extra_revision = {
         'cours_id': course_id,
@@ -404,16 +470,21 @@ def add_extra_revision_after_score(course_id: int, jalon: int, score: int, total
     
     json_manager.create_planning_item(extra_revision)
 
-def adjust_planning_after_high_score(course_id: int, jalon: int, params: PlanningParams):
+def adjust_planning_after_high_score(course_id: int, jalon: int, params: PlanningParams, date_eval: str = None):
     """Espace les révisions suivantes après un bon score"""
     planning_items = [p for p in json_manager.get_planning() 
                      if p.get('cours_id') == course_id and p.get('jalon', 0) > jalon and p.get('statut') == 'À faire']
+    
+    print(f"📊 Espacement de {len(planning_items)} révisions après bon score")
+    if date_eval:
+        print(f"📅 Date d'évaluation: {date_eval}")
     
     for item in planning_items:
         current_date = datetime.strptime(item['date_finale'], '%Y-%m-%d').date()
         new_date = current_date + timedelta(days=params.bonus_ok_days)
         item['date_finale'] = new_date.strftime('%Y-%m-%d')
         json_manager.update_planning_item(item['id'], item)
+        print(f"📅 Révision {item['jalon']} décalée du {current_date.strftime('%Y-%m-%d')} au {new_date.strftime('%Y-%m-%d')}")
 
 # === ENDPOINTS API ===
 
@@ -703,7 +774,8 @@ def create_score():
     
     # Ajuster le planning selon le score (seulement si jalon est numérique)
     if isinstance(jalon, int):
-        adjust_planning_with_score(cours_id, jalon, score, total)
+        date_eval = data.get('date_eval')
+        adjust_planning_with_score(cours_id, jalon, score, total, date_eval)
     
     return jsonify({"message": "Score créé avec succès", "score": score_result}), 201
 
