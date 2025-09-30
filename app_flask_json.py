@@ -44,15 +44,25 @@ class DayState:
 
 def load_params() -> PlanningParams:
     """Charge les paramètres depuis le JSON"""
-    params = json_manager.get_parametres()
+    params_list = json_manager.get_parametres()
+    
+    # Convertir la liste en dictionnaire
+    params = {}
+    if isinstance(params_list, list):
+        for param in params_list:
+            if isinstance(param, dict) and 'cle' in param and 'valeur' in param:
+                params[param['cle']] = param['valeur']
+    elif isinstance(params_list, dict):
+        params = params_list
+    
     return PlanningParams(
         duree_min=params.get('duree_min', 30),
-        duree_max=params.get('duree_max', 60),
-        nb_max_par_j=params.get('nb_max_par_j', 4),
+        duree_max=params.get('duree_max', 180),
+        nb_max_par_j=params.get('max_revisions_per_day', 3),
         default_daily_minutes=480,
-        revision_finale_jours=7,
-        min_gap_days=2,
-        bonus_ok_days=params.get('bonus_ok', 2)
+        revision_finale_jours=params.get('revision_finale_jours', 7),
+        min_gap_days=params.get('min_gap_days', 1),
+        bonus_ok_days=params.get('bonus_ok_days', 3)
     )
 
 def get_availability_map() -> Dict[str, int]:
