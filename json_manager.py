@@ -253,7 +253,17 @@ class JSONDataManager:
     # === MÉTHODES POUR LES PARAMÈTRES ===
     def get_parametres(self) -> Dict:
         """Récupère tous les paramètres"""
-        return self.data.get("parametres", {})
+        parametres = self.data.get("parametres", {})
+        
+        # Si parametres est une liste, la convertir en dictionnaire
+        if isinstance(parametres, list):
+            params_dict = {}
+            for param in parametres:
+                if isinstance(param, dict) and "cle" in param and "valeur" in param:
+                    params_dict[param["cle"]] = param["valeur"]
+            return params_dict
+        
+        return parametres
     
     def get_parametre(self, key: str) -> Any:
         """Récupère un paramètre spécifique"""
@@ -262,7 +272,17 @@ class JSONDataManager:
     def update_parametre(self, key: str, value: Any) -> bool:
         """Met à jour un paramètre"""
         if "parametres" not in self.data:
-            self.data["parametres"] = {}
+            self.data["parametres"] = []
+        
+        # Si parametres est une liste, la convertir en dictionnaire
+        if isinstance(self.data["parametres"], list):
+            params_dict = {}
+            for param in self.data["parametres"]:
+                if isinstance(param, dict) and "cle" in param and "valeur" in param:
+                    params_dict[param["cle"]] = param["valeur"]
+            self.data["parametres"] = params_dict
+        
+        # Maintenant on peut mettre à jour
         self.data["parametres"][key] = value
         self._save_data()
         return True
@@ -271,6 +291,16 @@ class JSONDataManager:
         """Met à jour plusieurs paramètres"""
         if "parametres" not in self.data:
             self.data["parametres"] = {}
+        
+        # Si parametres est une liste, la convertir en dictionnaire
+        if isinstance(self.data["parametres"], list):
+            params_dict = {}
+            for param in self.data["parametres"]:
+                if isinstance(param, dict) and "cle" in param and "valeur" in param:
+                    params_dict[param["cle"]] = param["valeur"]
+            self.data["parametres"] = params_dict
+        
+        # Maintenant on peut mettre à jour
         self.data["parametres"].update(params)
         self._save_data()
         return True
