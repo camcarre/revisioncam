@@ -670,8 +670,10 @@
       // Load courses
       async function loadCourses(examId = null) {
         try {
+          console.log('🔍 [COURS] Début de loadCourses() avec examId:', examId);
           const response = await fetch(`${BASE_URL}/api/examens`);
           const examens = await response.json();
+          console.log('🔍 [COURS] API examens appelée, réponse:', examens);
           
           if (examens.length === 0) {
             coursesContainer.innerHTML = `
@@ -686,6 +688,7 @@
 
           let allCourses = [];
           const examsToProcess = examId ? examens.filter(ex => ex.id == examId) : examens;
+          console.log('🔍 [COURS] Examens à traiter:', examsToProcess);
           
           for (const examen of examsToProcess) {
             try {
@@ -703,7 +706,9 @@
             }
           }
 
+          console.log('🔍 [COURS] Total des cours chargés:', allCourses.length, allCourses);
           if (allCourses.length === 0) {
+            console.log('🔍 [COURS] Aucun cours trouvé, affichage de l\'état vide');
             coursesContainer.innerHTML = `
               <div class="empty-state">
                 <i class="fas fa-book-open"></i>
@@ -760,11 +765,20 @@
       // Create course
       courseForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        console.log('🔍 [COURS] Soumission du formulaire de cours');
         
         const formData = new FormData(courseForm);
         const courseData = Object.fromEntries(formData);
+        console.log('🔍 [COURS] Données du formulaire:', courseData);
+        
+        // Convertir examen_id en entier
+        if (courseData.examen_id) {
+          courseData.examen_id = parseInt(courseData.examen_id);
+          console.log('🔍 [COURS] examen_id converti en entier:', courseData.examen_id);
+        }
         
         try {
+          console.log('🔍 [COURS] Envoi de la requête POST vers /api/cours avec:', courseData);
           const response = await fetch(`${BASE_URL}/api/cours`, {
             method: 'POST',
             headers: {
@@ -772,20 +786,27 @@
             },
             body: JSON.stringify(courseData),
           });
+          console.log('🔍 [COURS] Réponse reçue:', response.status, response.statusText);
 
           if (response.ok) {
             const result = await response.json();
+            console.log('🔍 [COURS] Cours créé avec succès:', result);
             showAlert('Cours créé avec succès ! Le planning a été automatiquement généré.', 'success');
             courseForm.reset();
             
             // Recharger les examens dans le filtre pour s'assurer qu'ils sont à jour
+            console.log('🔍 [COURS] Rechargement des examens pour le filtre...');
             await loadExamensForFilter();
             
             // Sélectionner automatiquement l'examen du cours créé dans le filtre
+            console.log('🔍 [COURS] Sélection de l\'examen:', result.examen_id);
+            console.log('🔍 [COURS] Filtre avant sélection:', filterExamSelect.value);
             filterExamSelect.value = result.examen_id;
+            console.log('🔍 [COURS] Filtre après sélection:', filterExamSelect.value);
             
             // Recharger les cours pour l'examen sélectionné
-            loadCourses(result.examen_id);
+            console.log('🔍 [COURS] Rechargement des cours pour l\'examen:', result.examen_id);
+            await loadCourses(result.examen_id);
         } else {
             const error = await response.json();
             showAlert(`Erreur: ${error.detail || 'Impossible de créer le cours'}`, 'danger');
@@ -910,8 +931,8 @@
         try {
           console.log('📤 Export des données...');
           const response = await fetch(`${BASE_URL}/api/export`);
-          
-          if (!response.ok) {
+
+        if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
           

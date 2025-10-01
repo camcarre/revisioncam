@@ -620,6 +620,7 @@
       // Load available jalons for a specific course
       async function loadJalonsForCourse(courseId) {
         try {
+          console.log('🔍 [SCORES] Début de loadJalonsForCourse() avec courseId:', courseId);
           const jalonSelect = document.getElementById('jalon');
           jalonSelect.innerHTML = '<option value="">Chargement des jalons...</option>';
           
@@ -629,18 +630,22 @@
             throw new Error('Cours non trouvé');
           }
           const course = await courseResponse.json();
+          console.log('🔍 [SCORES] Cours récupéré:', course);
           
           // Get existing scores for this course
           const scoresResponse = await fetch(`${BASE_URL}/api/scores?cours_id=${courseId}`);
           const existingScores = scoresResponse.ok ? await scoresResponse.json() : [];
+          console.log('🔍 [SCORES] Scores existants:', existingScores);
           
           // Calculate number of revisions based on priorite_indice
           const prioriteIndice = course.priorite_indice || 5;
           const nbRevisions = Math.min(prioriteIndice + 1, 10); // Max 10 révisions
+          console.log('🔍 [SCORES] priorite_indice:', prioriteIndice, 'nbRevisions:', nbRevisions);
           
           // Get planning items for this course to see which jalons exist
           const planningResponse = await fetch(`${BASE_URL}/api/planning/course/${courseId}`);
           const planningItems = planningResponse.ok ? await planningResponse.json() : [];
+          console.log('🔍 [SCORES] Planning items:', planningItems);
           
           // Build jalon options
           jalonSelect.innerHTML = '<option value="">Sélectionnez un jalon</option>';
@@ -648,18 +653,23 @@
           for (let i = 1; i <= nbRevisions; i++) {
             // Check if this jalon already has a score
             const hasScore = existingScores.some(score => score.jalon === i);
+            console.log('🔍 [SCORES] Jalon', i, 'hasScore:', hasScore);
             
             if (!hasScore) {
               // Get the planning item for this jalon
               const planningItem = planningItems.find(item => item.jalon === i);
               const dateInfo = planningItem ? ` (${new Date(planningItem.date_finale).toLocaleDateString('fr-FR')})` : '';
+              console.log('🔍 [SCORES] Ajout du jalon', i, 'avec date:', dateInfo);
               
               jalonSelect.innerHTML += `<option value="${i}">Jalon ${i}${dateInfo}</option>`;
             }
           }
           
           if (jalonSelect.children.length === 1) {
+            console.log('🔍 [SCORES] Aucun jalon disponible');
             jalonSelect.innerHTML = '<option value="">Aucun jalon disponible</option>';
+          } else {
+            console.log('🔍 [SCORES] Jalons chargés:', jalonSelect.children.length - 1);
           }
           
         } catch (error) {
@@ -778,11 +788,14 @@
       // Create score
       scoreForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        console.log('🔍 [SCORES] Soumission du formulaire de score');
         
         const formData = new FormData(scoreForm);
         const scoreData = Object.fromEntries(formData);
+        console.log('🔍 [SCORES] Données du formulaire:', scoreData);
         
         try {
+          console.log('🔍 [SCORES] Envoi de la requête POST vers /api/scores avec:', scoreData);
           const response = await fetch(`${BASE_URL}/api/scores`, {
           method: 'POST',
             headers: {
@@ -790,9 +803,11 @@
             },
             body: JSON.stringify(scoreData),
           });
+          console.log('🔍 [SCORES] Réponse reçue:', response.status, response.statusText);
 
           if (response.ok) {
             const result = await response.json();
+            console.log('🔍 [SCORES] Score créé avec succès:', result);
             
             // Message adaptatif selon le score
             const score = parseInt(scoreData.score);

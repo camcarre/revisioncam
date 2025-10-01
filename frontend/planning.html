@@ -816,11 +816,14 @@
       // Créer un score par défaut quand on marque une révision comme "Fait"
       async function createDefaultScoreForPlanningItem(item) {
         try {
+          console.log('🔍 [PLANNING] Création d\'un score par défaut pour:', item);
           // Vérifier si un score existe déjà pour ce jalon
           const scoresResponse = await fetch(`${BASE_URL}/api/scores?cours_id=${item.cours_id}`);
           const existingScores = scoresResponse.ok ? await scoresResponse.json() : [];
+          console.log('🔍 [PLANNING] Scores existants:', existingScores);
           
           const hasExistingScore = existingScores.some(score => score.jalon === item.jalon);
+          console.log('🔍 [PLANNING] Score existant pour jalon', item.jalon, ':', hasExistingScore);
           
           if (!hasExistingScore) {
             // Créer un score par défaut (score moyen pour éviter les ajustements automatiques)
@@ -831,6 +834,7 @@
               total: 100,
               date_eval: new Date().toISOString().split('T')[0]
             };
+            console.log('🔍 [PLANNING] Création du score par défaut:', defaultScore);
             
             const response = await fetch(`${BASE_URL}/api/scores`, {
               method: 'POST',
@@ -840,10 +844,12 @@
               body: JSON.stringify(defaultScore),
             });
             
+            console.log('🔍 [PLANNING] Réponse de création du score:', response.status, response.statusText);
+            
             if (response.ok) {
-              console.log(`📊 Score par défaut créé pour le cours ${item.cours_id}, jalon ${item.jalon}`);
+              console.log('🔍 [PLANNING] Score par défaut créé avec succès pour le cours', item.cours_id, 'jalon', item.jalon);
             } else {
-              console.warn(`⚠️ Impossible de créer le score par défaut pour le cours ${item.cours_id}, jalon ${item.jalon}`);
+              console.warn('🔍 [PLANNING] Impossible de créer le score par défaut pour le cours', item.cours_id, 'jalon', item.jalon);
             }
           }
         } catch (error) {
@@ -853,8 +859,13 @@
 
       // Toggle planning item status avec menu contextuel
       async function togglePlanningItemStatus(itemId, currentStatus) {
+        console.log('🔍 [PLANNING] Début de togglePlanningItemStatus avec itemId:', itemId, 'currentStatus:', currentStatus);
         const item = planningData.find(i => i.id === itemId);
-        if (!item) return;
+        if (!item) {
+          console.warn('🔍 [PLANNING] Item non trouvé avec id:', itemId);
+          return;
+        }
+        console.log('🔍 [PLANNING] Item trouvé:', item);
 
         // Menu contextuel pour choisir le statut
         const action = await showStatusMenu(currentStatus);

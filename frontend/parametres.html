@@ -962,6 +962,7 @@
         button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sauvegarde...';
         
         try {
+          console.log('🔍 [PARAMETRES] Sauvegarde du paramètre:', key, 'valeur:', value);
           const response = await fetch(`${BASE_URL}/api/parametres/${key}`, {
             method: 'PUT',
             headers: {
@@ -969,8 +970,10 @@
             },
             body: JSON.stringify({ valeur: value }),
           });
+          console.log('🔍 [PARAMETRES] Réponse de sauvegarde:', response.status, response.statusText);
 
           if (response.ok) {
+            console.log('🔍 [PARAMETRES] Paramètre sauvegardé avec succès');
             showAlert('Paramètre sauvegardé avec succès', 'success');
           } else {
             const error = await response.json();
@@ -1361,11 +1364,13 @@
 
       async function addExamen(examenData) {
         try {
+          console.log('🔍 [PARAMETRES] Ajout d\'examen avec données:', examenData);
           const response = await fetch(`${BASE_URL}/api/examens`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(examenData)
           });
+          console.log('🔍 [PARAMETRES] Réponse de création d\'examen:', response.status, response.statusText);
           
           if (!response.ok) {
             const error = await response.json();
